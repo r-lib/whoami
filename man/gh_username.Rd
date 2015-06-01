@@ -4,7 +4,11 @@
 \alias{gh_username}
 \title{Find the current user's GitHub username}
 \usage{
-gh_username()
+gh_username(token = Sys.getenv("GITHUB_TOKEN"))
+}
+\arguments{
+\item{token}{GitHub token to use. By default it uses
+the \code{GITHUB_TOKEN} environment variable, if set.}
 }
 \value{
 GitHub username, or an error is thrown if it cannot be found.

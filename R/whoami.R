@@ -143,6 +143,8 @@ email_address <- function() {
 #' Searches on GitHub, for the user's email address, see
 #' \code{\link{email_address}}.
 #'
+#' @param token GitHub token to use. By default it uses
+#'   the \code{GITHUB_TOKEN} environment variable, if set.
 #' @return GitHub username, or an error is thrown if it cannot be found.
 #' 
 #' @family user names
@@ -154,16 +156,23 @@ email_address <- function() {
 #' gh_username()
 #' }
 
-gh_username <- function() {
+gh_username <- function(token = Sys.getenv("GITHUB_TOKEN")) {
   email <- try(email_address(), silent = TRUE)
   if (ok(email)) {
     if (! grepl('@', email)) {
       stop("This does not seem to be an email address")
     }
-    url <- URLencode(paste0(gh_url, "/search/users?q=", email, " in:email"))
+    url <- URLencode(paste0(gh_url, "/search/users?q=", email,
+                            " in:email"))
+
+    auth <- character()
+    if (token != "") auth <- c("Authorization" = paste("token", token))
+
     resp <- GET(
       url,
-      add_headers("user-agent" = "https://github.com/gaborcsardi/whoami")
+      add_headers("user-agent" = "https://github.com/gaborcsardi/whoami",
+                  'accept' = 'application/vnd.github.v3+json',
+                  .headers = auth)
     )
     stop_for_status(resp)
     data <- fromJSON(content(resp, as = "text"), simplifyVector = FALSE)
