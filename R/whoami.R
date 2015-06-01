@@ -1,0 +1,126 @@
+
+ok <- function(x) {
+  !inherits(x, "try-error") && !is.null(x) && !is.na(x) && x != ""
+}
+
+`%or%` <- function(l, r) {
+  if (ok(l)) l else r
+}
+
+str_trim <- function(x) {
+  gsub("\\s+$", "", gsub("^\\s+", "", x))
+}
+
+#' User name of the current user
+#'
+#' Tries the \code{LOGNAME}, \code{USER}, \code{LNAME}, \code{USERNAME}
+#' environment variables first. Then it tries the `id` command on Unix-like
+#' platforms and `whoami` on Windows.
+#'
+#' @return The user name of the current user.
+#'
+#' @family user names
+#' @export
+#' @examples
+#' username()
+
+username <- function() {
+
+  e <- Sys.getenv()
+  user <- e["LOGNAME"] %or% e["USER"] %or% e["LNAME"] %or% e["USERNAME"]
+  if (ok(user)) return(as.vector(user))
+
+  if (.Platform$OS.type == "unix") {
+    user <- try(str_trim(system("id -un", intern = TRUE)))
+    if (ok(user)) return(user)
+  } else if (.Platform$OS.type == "windows") {
+    user <- try({
+      user <- system("whoami", intern = TRUE, show.output.on.console = FALSE)
+      user <- sub("^.*\\\\", "", str_trim(user))
+    })
+    if (ok(user)) return(user)
+  } else {
+    stop("Unknown platform, cannot determine username")
+  }
+  stop("Cannot determine username")
+}
+
+#' Full name of the current user
+#'
+#' Tries system full names and git configuration as well.
+#'
+#' @return The full name of the current user.
+#'
+#' @family user names
+#' @export
+#' @examples
+#' fullname()
+
+fullname <- function() {
+  if (Sys.info()["sysname"] == "Darwin") {
+    user <- try({
+      user <- system("id -P", intern = TRUE)
+      user <- str_trim(user)
+      user <- strsplit(user, ":")[[1]][8]
+    })
+    if (ok(user)) return(user)
+
+    user <- try({
+      user <- system("osascript -e \"long user name of (system info)\"",
+                     intern = TRUE)
+      user <- str_trim(user)
+    })
+    if (ok(user)) return(user)
+
+  } else if (.Platform$OS.type == "windows") {
+    user <- try({
+      user <- system("git config --global user.name", intern = TRUE)
+      user <- str_trim(user)
+    })    
+    if (ok(user)) return(user)
+
+    user <- try({
+      user <- system(
+        "wmic useraccount where name=\"%username%\" get fullname",
+        intern = TRUE
+      )
+      user <- sub("FullName", "", user)
+      user <- str_trim(user)
+    })
+    
+    if (ok(user)) return(user)
+    
+  } else {
+    user <- try({
+      user <- system("getent passwd $(whoami)", intern = TRUE)
+      user <- str_trim(user)
+      user <- strsplit(user, ":")[[1]][5]
+      user <- sub(",.*", "")
+    })
+    if (ok(user)) return(user)
+
+    user <- try({
+      user <- system("git config --global user.name", intern = TRUE)
+      user <- str_trim(user)
+    })
+    if (ok(user)) return(user)
+  }
+
+  stop("Cannot determine full name")
+}
+
+#' User name and full name of the current user
+#'
+#' Calls \code{\link{username}} and \code{\link{fullname}}.
+#'
+#' @return A named character vector with two entries: \code{username} and
+#'   \code{fullname}.
+#'
+#' @family user names
+#' @export
+#' @examples
+#' whoami()
+
+whoami <- function() {
+  c("username" = username(), "fullname" = fullname())
+}
