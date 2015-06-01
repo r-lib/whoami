@@ -1,8 +1,12 @@
 
 
 
-
 # whoami
+
+[![Linux Build Status](https://travis-ci.org/gaborcsardi/whoami.svg?branch=master)](https://travis-ci.org/gaborcsardi/whoami)
+[![Windows Build status](https://ci.appveyor.com/api/projects/status/github/gaborcsardi/whoami?svg=true)](https://ci.appveyor.com/project/gaborcsardi/whoami)
+[![](http://www.r-pkg.org/badges/version/whoami)](http://www.r-pkg.org/pkg/whoami)
+[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/whoami)](http://www.r-pkg.org/pkg/whoami)
 
 > Username, full name, email address, GitHub username of the current user
 
