@@ -1,10 +1,14 @@
 Package: whoami
-Title: User Name and Full Name of the Current User
+Title: UserName, Full Name, Email Address, GitHub Username of the Current User
 Version: 1.0.0
 Author: Gabor Csardi
 Maintainer: Gabor Csardi <csardi.gabor@gmail.com>
 Description: Look up the user name and full name of the current user,
+    the current user's email address and GitHub username,
     using various sources of system and configuration information.
 License: MIT + file LICENSE
 URL: https://github.com/gaborcsardi/whoami
 BugReports: https://github.com/gaborcsardi/whoami/issues
+Imports:
+    httr,
+    jsonlite

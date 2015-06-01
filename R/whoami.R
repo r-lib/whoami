@@ -1,4 +1,6 @@
 
+gh_url <- "https://api.github.com"
+
 ok <- function(x) {
   !inherits(x, "try-error") && !is.null(x) && !is.na(x) && x != ""
 }
@@ -109,6 +111,45 @@ fullname <- function() {
   stop("Cannot determine full name")
 }
 
+#' @export
+
+email_address <- function() {
+  email <- try({
+    email <- system("git config --global user.email", intern = TRUE)
+    email <- str_trim(email)
+  }, silent = TRUE)
+  if (ok(email)) return(email)
+
+  stop("Cannot get email address")
+}
+
+#' @export
+#' @importFrom httr GET add_headers stop_for_status content
+#' @importFrom jsonlite fromJSON
+
+gh_username <- function() {
+  email <- try(email_address(), silent = TRUE)
+  if (ok(email)) {
+    if (! grepl('@', email)) {
+      stop("This does not seem to be an email address")
+    }
+    url <- URLencode(paste0(gh_url, "/search/users?q=", email, " in:email"))
+    resp <- GET(
+      url,
+      add_headers("user-agent" = "https://github.com/gaborcsardi/whoami")
+    )
+    stop_for_status(resp)
+    data <- fromJSON(content(resp, as = "text"), simplifyVector = FALSE)
+    if (data$total_count == 0) {
+      stop("Cannot find GitHub username for email")
+    }
+
+    return(data$items[[1]]$login)
+  }
+
+  stop("Cannot get GitHub username")
+}
+
 #' User name and full name of the current user
 #'
 #' Calls \code{\link{username}} and \code{\link{fullname}}.
@@ -122,5 +163,9 @@ fullname <- function() {
 #' whoami()
 
 whoami <- function() {
-  c("username" = username(), "fullname" = fullname())
+  c("username" = username(),
+    "fullname" = fullname(),
+    "email_address" = email_address(),
+    "gh_username" = gh_username()
+    )
 }
