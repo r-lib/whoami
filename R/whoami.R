@@ -31,13 +31,13 @@ username <- function() {
   if (ok(user)) return(as.vector(user))
 
   if (.Platform$OS.type == "unix") {
-    user <- try(str_trim(system("id -un", intern = TRUE)))
+    user <- try(str_trim(system("id -un", intern = TRUE)), silent = TRUE)
     if (ok(user)) return(user)
   } else if (.Platform$OS.type == "windows") {
     user <- try({
       user <- system("whoami", intern = TRUE, show.output.on.console = FALSE)
       user <- sub("^.*\\\\", "", str_trim(user))
-    })
+    }, silent = TRUE)
     if (ok(user)) return(user)
   } else {
     stop("Unknown platform, cannot determine username")
@@ -62,21 +62,21 @@ fullname <- function() {
       user <- system("id -P", intern = TRUE)
       user <- str_trim(user)
       user <- strsplit(user, ":")[[1]][8]
-    })
+    }, silent = TRUE)
     if (ok(user)) return(user)
 
     user <- try({
       user <- system("osascript -e \"long user name of (system info)\"",
                      intern = TRUE)
       user <- str_trim(user)
-    })
+    }, silent = TRUE)
     if (ok(user)) return(user)
 
   } else if (.Platform$OS.type == "windows") {
     user <- try({
       user <- system("git config --global user.name", intern = TRUE)
       user <- str_trim(user)
-    })    
+    }, silent = TRUE)
     if (ok(user)) return(user)
 
     user <- try({
@@ -86,7 +86,7 @@ fullname <- function() {
       )
       user <- sub("FullName", "", user)
       user <- str_trim(user)
-    })
+    }, silent = TRUE)
     
     if (ok(user)) return(user)
     
@@ -96,13 +96,13 @@ fullname <- function() {
       user <- str_trim(user)
       user <- strsplit(user, ":")[[1]][5]
       user <- sub(",.*", "")
-    })
+    }, silent = TRUE)
     if (ok(user)) return(user)
 
     user <- try({
       user <- system("git config --global user.name", intern = TRUE)
       user <- str_trim(user)
-    })
+    }, silent = TRUE)
     if (ok(user)) return(user)
   }
 
