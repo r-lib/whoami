@@ -13,10 +13,13 @@ The full name of the current user.
 Tries system full names and git configuration as well.
 }
 \examples{
+\dontrun{
 fullname()
 }
+}
 \seealso{
-Other user.names: \code{\link{username}};
+Other user.names: \code{\link{email_address}};
+  \code{\link{gh_username}}; \code{\link{username}};
   \code{\link{whoami}}
 }
 

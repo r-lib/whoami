@@ -24,7 +24,9 @@ str_trim <- function(x) {
 #' @family user names
 #' @export
 #' @examples
+#' \dontrun{
 #' username()
+#' }
 
 username <- function() {
 
@@ -56,7 +58,9 @@ username <- function() {
 #' @family user names
 #' @export
 #' @examples
+#' \dontrun{
 #' fullname()
+#' }
 
 fullname <- function() {
   if (Sys.info()["sysname"] == "Darwin") {
@@ -111,7 +115,18 @@ fullname <- function() {
   stop("Cannot determine full name")
 }
 
+#' Email address of the current user
+#'
+#' It tries to find it in the user's global git configuration.
+#'
+#' @return Email address on success. Otherwise an error is thrown.
+#' 
+#' @family user names
 #' @export
+#' @examples
+#' \dontrun{
+#' email_address()
+#' }
 
 email_address <- function() {
   email <- try({
@@ -123,9 +138,21 @@ email_address <- function() {
   stop("Cannot get email address")
 }
 
+#' Find the current user's GitHub username
+#'
+#' Searches on GitHub, for the user's email address, see
+#' \code{\link{email_address}}.
+#'
+#' @return GitHub username, or an error is thrown if it cannot be found.
+#' 
+#' @family user names
 #' @export
 #' @importFrom httr GET add_headers stop_for_status content
 #' @importFrom jsonlite fromJSON
+#' @examples
+#' \dontrun{
+#' gh_username()
+#' }
 
 gh_username <- function() {
   email <- try(email_address(), silent = TRUE)
@@ -160,7 +187,9 @@ gh_username <- function() {
 #' @family user names
 #' @export
 #' @examples
+#' \dontrun{
 #' whoami()
+#' }
 
 whoami <- function() {
   c("username" = username(),

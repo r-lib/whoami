@@ -14,10 +14,13 @@ A named character vector with two entries: \code{username} and
 Calls \code{\link{username}} and \code{\link{fullname}}.
 }
 \examples{
+\dontrun{
 whoami()
 }
+}
 \seealso{
-Other user.names: \code{\link{fullname}};
+Other user.names: \code{\link{email_address}};
+  \code{\link{fullname}}; \code{\link{gh_username}};
   \code{\link{username}}
 }
 
