@@ -4,7 +4,7 @@ gh_url <- "https://api.github.com"
 ok <- function(x) {
   !inherits(x, "try-error") &&
     !is.null(x) &&
-    length(x) &&
+    length(x) == 1 &&
     x != "" &&
     !is.na(x)
 }
@@ -90,12 +90,14 @@ fullname <- function() {
     if (ok(user)) return(user)
 
     user <- try({
+      username <- username()
       user <- system(
-        "wmic useraccount where name=\"%username%\" get fullname",
+        paste0("wmic useraccount where name=\"", username,
+               "\" get fullname"),
         intern = TRUE
       )
       user <- sub("FullName", "", user)
-      user <- str_trim(user)
+      user <- str_trim(paste(user, collapse = ""))
     }, silent = TRUE)
     
     if (ok(user)) return(user)
