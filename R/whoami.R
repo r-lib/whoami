@@ -111,12 +111,13 @@ fullname <- function() {
     }, silent = TRUE)
     if (ok(user)) return(user)
 
-    user <- try(suppressWarnings({
-      user <- system("git config --global user.name", intern = TRUE)
-      user <- str_trim(user)
-    }), silent = TRUE)
-    if (ok(user)) return(user)
   }
+
+  user <- try(suppressWarnings({
+    user <- system("git config --global user.name", intern = TRUE)
+    user <- str_trim(user)
+  }), silent = TRUE)
+  if (ok(user)) return(user)
 
   stop("Cannot determine full name")
 }
