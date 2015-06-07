@@ -2,7 +2,11 @@
 gh_url <- "https://api.github.com"
 
 ok <- function(x) {
-  !inherits(x, "try-error") && !is.null(x) && !is.na(x) && x != ""
+  !inherits(x, "try-error") &&
+    !is.null(x) &&
+    length(x) &&
+    x != "" &&
+    !is.na(x)
 }
 
 `%or%` <- function(l, r) {
