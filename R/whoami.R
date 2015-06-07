@@ -83,10 +83,10 @@ fullname <- function() {
     if (ok(user)) return(user)
 
   } else if (.Platform$OS.type == "windows") {
-    user <- try({
+    user <- try(suppressWarnings({
       user <- system("git config --global user.name", intern = TRUE)
       user <- str_trim(user)
-    }, silent = TRUE)
+    }), silent = TRUE)
     if (ok(user)) return(user)
 
     user <- try({
@@ -111,10 +111,10 @@ fullname <- function() {
     }, silent = TRUE)
     if (ok(user)) return(user)
 
-    user <- try({
+    user <- try(suppressWarnings({
       user <- system("git config --global user.name", intern = TRUE)
       user <- str_trim(user)
-    }, silent = TRUE)
+    }), silent = TRUE)
     if (ok(user)) return(user)
   }
 
@@ -135,10 +135,10 @@ fullname <- function() {
 #' }
 
 email_address <- function() {
-  email <- try({
+  email <- try(suppressWarnings({
     email <- system("git config --global user.email", intern = TRUE)
     email <- str_trim(email)
-  }, silent = TRUE)
+  }), silent = TRUE)
   if (ok(email)) return(email)
 
   stop("Cannot get email address")
