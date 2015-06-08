@@ -3,7 +3,7 @@ Title: Username, Full Name, Email Address, 'GitHub' Username of the Current User
 Version: 1.0.0
 Author: Gabor Csardi
 Maintainer: Gabor Csardi <csardi.gabor@gmail.com>
-Description: Look up the user name and full name of the current user,
+Description: Look up the username and full name of the current user,
     the current user's email address and 'GitHub' username,
     using various sources of system and configuration information.
 License: MIT + file LICENSE
