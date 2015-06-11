@@ -4,7 +4,12 @@
 \alias{fullname}
 \title{Full name of the current user}
 \usage{
-fullname()
+fullname(fallback = NULL)
+}
+\arguments{
+\item{fallback}{If not \code{NULL} then this value is returned
+if the full name of the user cannot be found, instead of
+triggering an error.}
 }
 \value{
 The full name of the current user.

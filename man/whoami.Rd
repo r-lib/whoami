@@ -7,8 +7,8 @@
 whoami()
 }
 \value{
-A named character vector with two entries: \code{username} and
-  \code{fullname}.
+A named character vector with entries: \code{username},
+  \code{fullname}, \code{email_address}, \code{gh_username}.
 }
 \description{
 Calls \code{\link{username}} and \code{\link{fullname}}.

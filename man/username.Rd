@@ -4,7 +4,11 @@
 \alias{username}
 \title{User name of the current user}
 \usage{
-username()
+username(fallback = NULL)
+}
+\arguments{
+\item{fallback}{If not \code{NULL} then this value is returned
+if the username cannot be found, instead of triggering an error.}
 }
 \value{
 The user name of the current user.

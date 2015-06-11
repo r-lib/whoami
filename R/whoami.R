@@ -17,12 +17,22 @@ str_trim <- function(x) {
   gsub("\\s+$", "", gsub("^\\s+", "", x))
 }
 
+fallback_or_stop <- function(fallback, msg) {
+  if (!is.null(fallback)) {
+    fallback
+  } else {
+    stop(msg)
+  }
+}
+
 #' User name of the current user
 #'
 #' Tries the \code{LOGNAME}, \code{USER}, \code{LNAME}, \code{USERNAME}
 #' environment variables first. Then it tries the `id` command on Unix-like
 #' platforms and `whoami` on Windows.
 #'
+#' @param fallback If not \code{NULL} then this value is returned
+#'   if the username cannot be found, instead of triggering an error.
 #' @return The user name of the current user.
 #'
 #' @family user names
@@ -32,7 +42,7 @@ str_trim <- function(x) {
 #' username()
 #' }
 
-username <- function() {
+username <- function(fallback = NULL) {
 
   e <- Sys.getenv()
   user <- e["LOGNAME"] %or% e["USER"] %or% e["LNAME"] %or% e["USERNAME"]
@@ -48,15 +58,21 @@ username <- function() {
     }, silent = TRUE)
     if (ok(user)) return(user)
   } else {
-    stop("Unknown platform, cannot determine username")
+    return(fallback_or_stop(
+      fallback,
+      "Unknown platform, cannot determine username"
+    ))
   }
-  stop("Cannot determine username")
+  fallback_or_stop(fallback, "Cannot determine username")
 }
 
 #' Full name of the current user
 #'
 #' Tries system full names and git configuration as well.
 #'
+#' @param fallback If not \code{NULL} then this value is returned
+#'   if the full name of the user cannot be found, instead of
+#'   triggering an error.
 #' @return The full name of the current user.
 #'
 #' @family user names
@@ -66,7 +82,7 @@ username <- function() {
 #' fullname()
 #' }
 
-fullname <- function() {
+fullname <- function(fallback = NULL) {
   if (Sys.info()["sysname"] == "Darwin") {
     user <- try({
       user <- system("id -P", intern = TRUE)
@@ -119,13 +135,15 @@ fullname <- function() {
   }), silent = TRUE)
   if (ok(user)) return(user)
 
-  stop("Cannot determine full name")
+  fallback_or_stop(fallback, "Cannot determine full name")
 }
 
 #' Email address of the current user
 #'
 #' It tries to find it in the user's global git configuration.
 #'
+#' @param fallback If not \code{NULL} then this value is returned
+#'   if the email address cannot be found, instead of triggering an error.
 #' @return Email address on success. Otherwise an error is thrown.
 #' 
 #' @family user names
@@ -135,14 +153,14 @@ fullname <- function() {
 #' email_address()
 #' }
 
-email_address <- function() {
+email_address <- function(fallback = NULL) {
   email <- try(suppressWarnings({
     email <- system("git config --global user.email", intern = TRUE)
     email <- str_trim(email)
   }), silent = TRUE)
   if (ok(email)) return(email)
 
-  stop("Cannot get email address")
+  fallback_or_stop(fallback, "Cannot get email address")
 }
 
 #' Find the current user's GitHub username
@@ -152,22 +170,29 @@ email_address <- function() {
 #'
 #' @param token GitHub token to use. By default it uses
 #'   the \code{GITHUB_TOKEN} environment variable, if set.
+#' @param fallback If not \code{NULL} then this value is returned
+#'   if the GitHub username cannot be found, instead of triggering an
+#'   error.
 #' @return GitHub username, or an error is thrown if it cannot be found.
 #' 
 #' @family user names
 #' @export
-#' @importFrom httr GET add_headers stop_for_status content
+#' @importFrom httr GET add_headers status_code content
 #' @importFrom jsonlite fromJSON
 #' @examples
 #' \dontrun{
 #' gh_username()
 #' }
 
-gh_username <- function(token = Sys.getenv("GITHUB_TOKEN")) {
+gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
+                        fallback = NULL) {
   email <- try(email_address(), silent = TRUE)
   if (ok(email)) {
     if (! grepl('@', email)) {
-      stop("This does not seem to be an email address")
+      return(fallback_or_stop(
+        fallback,
+        "This does not seem to be an email address"
+      ))
     }
     url <- URLencode(paste0(gh_url, "/search/users?q=", email,
                             " in:email"))
@@ -181,24 +206,28 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN")) {
                   'accept' = 'application/vnd.github.v3+json',
                   .headers = auth)
     )
-    stop_for_status(resp)
+    if (status_code(resp) >= 300) {
+      return(fallback_or_stop(fallback, "Cannot find GitHub username"))
+    }
     data <- fromJSON(content(resp, as = "text"), simplifyVector = FALSE)
     if (data$total_count == 0) {
-      stop("Cannot find GitHub username for email")
+      return(
+        fallback_or_stop(fallback, "Cannot find GitHub username for email")
+      )
     }
 
     return(data$items[[1]]$login)
   }
 
-  stop("Cannot get GitHub username")
+  fallback_or_stop(falback, "Cannot get GitHub username")
 }
 
 #' User name and full name of the current user
 #'
 #' Calls \code{\link{username}} and \code{\link{fullname}}.
 #'
-#' @return A named character vector with two entries: \code{username} and
-#'   \code{fullname}.
+#' @return A named character vector with entries: \code{username},
+#'   \code{fullname}, \code{email_address}, \code{gh_username}.
 #'
 #' @family user names
 #' @export

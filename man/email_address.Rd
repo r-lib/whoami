@@ -4,7 +4,11 @@
 \alias{email_address}
 \title{Email address of the current user}
 \usage{
-email_address()
+email_address(fallback = NULL)
+}
+\arguments{
+\item{fallback}{If not \code{NULL} then this value is returned
+if the email address cannot be found, instead of triggering an error.}
 }
 \value{
 Email address on success. Otherwise an error is thrown.
