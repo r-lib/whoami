@@ -40,4 +40,11 @@ test_that("gh_username() falls back", {
   )
 
   expect_equal(gh, "foobar")
+
+  with_mock(
+    `whoami::email_address` = function(...) stop(),
+    gh <- gh_username(fallback = "foobar2")
+  )
+
+  expect_equal(gh, "foobar2")
 })

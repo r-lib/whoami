@@ -219,7 +219,7 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
     return(data$items[[1]]$login)
   }
 
-  fallback_or_stop(falback, "Cannot get GitHub username")
+  fallback_or_stop(fallback, "Cannot get GitHub username")
 }
 
 #' User name and full name of the current user
