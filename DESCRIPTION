@@ -1,6 +1,6 @@
 Package: whoami
 Title: Username, Full Name, Email Address, 'GitHub' Username of the Current User
-Version: 1.1.0
+Version: 1.1.1
 Author: Gabor Csardi
 Maintainer: Gabor Csardi <csardi.gabor@gmail.com>
 Description: Look up the username and full name of the current user,
