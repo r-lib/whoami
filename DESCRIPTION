@@ -11,5 +11,6 @@ URL: https://github.com/gaborcsardi/whoami
 BugReports: https://github.com/gaborcsardi/whoami/issues
 Imports: 
     httr,
-    jsonlite
+    jsonlite,
+    utils
 Suggests: testthat
