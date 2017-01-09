@@ -9,8 +9,11 @@ Description: Look up the username and full name of the current user,
 License: MIT + file LICENSE
 URL: https://github.com/gaborcsardi/whoami
 BugReports: https://github.com/gaborcsardi/whoami/issues
-Imports: 
+Imports:
+    git2r,
     httr,
     jsonlite,
     utils
-Suggests: testthat
+Suggests:
+    testthat
+RoxygenNote: 5.0.1
