@@ -100,8 +100,7 @@ fullname <- function(fallback = NULL) {
 
   } else if (.Platform$OS.type == "windows") {
     user <- try(suppressWarnings({
-      user <- system("git config --global user.name", intern = TRUE)
-      user <- str_trim(user)
+      user <- git2r::config()[["global"]][["user.name"]]
     }), silent = TRUE)
     if (ok(user)) return(user)
 
@@ -130,8 +129,7 @@ fullname <- function(fallback = NULL) {
   }
 
   user <- try(suppressWarnings({
-    user <- system("git config --global user.name", intern = TRUE)
-    user <- str_trim(user)
+    user <- git2r::config()[["global"]][["user.name"]]
   }), silent = TRUE)
   if (ok(user)) return(user)
 
@@ -155,8 +153,7 @@ fullname <- function(fallback = NULL) {
 
 email_address <- function(fallback = NULL) {
   email <- try(suppressWarnings({
-    email <- system("git config --global user.email", intern = TRUE)
-    email <- str_trim(email)
+    email <- git2r::config()[["global"]][["email"]]
   }), silent = TRUE)
   if (ok(email)) return(email)
 

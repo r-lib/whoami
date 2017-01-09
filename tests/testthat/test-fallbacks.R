@@ -15,7 +15,7 @@ test_that("username() falls back", {
 test_that("fullname() falls back", {
 
   with_mock(
-    `base::system` = function(...) stop(),
+    `git2r::config` = function(...) stop(),
     f <- fullname(fallback = "Foo Bar")
   )
 
@@ -25,7 +25,7 @@ test_that("fullname() falls back", {
 test_that("email_address() falls back", {
 
   with_mock(
-    `base::system` = function(...) stop(),
+    `git2r::config` = function(...) stop(),
     e <- email_address(fallback = "foo@bar")
   )
 
