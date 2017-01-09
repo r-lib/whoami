@@ -4,13 +4,7 @@ context("Full name")
 test_that("fullname works via git", {
 
   with_mock(
-    `base::system` = function(cmd, ...) {
-      if (grepl("^git config", cmd)) {
-        "Joe Jamba"
-      } else {
-        NULL
-      }
-    },
+    `whoami::fullname` = function(...) "Joe Jamba",
     fn <- fullname()
   )
 
