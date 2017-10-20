@@ -14,6 +14,7 @@ Imports:
     jsonlite,
     utils
 Suggests: 
+    covr,
     mockery,
     testthat
 Encoding: UTF-8
