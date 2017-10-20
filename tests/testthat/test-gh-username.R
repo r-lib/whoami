@@ -18,12 +18,6 @@ test_that("Github username works", {
     skip("No internet, skipping")
   }
 
-  with_mock(
-    `whoami::email_address` = function(...) "csardi.gabor@gmail.com",
-    ghuser <- gh_username()
-  )
-
-
-  expect_equal(ghuser, "gaborcsardi")
-  
+  mockery::stub(gh_username, "email_address", "csardi.gabor@gmail.com")
+  expect_equal(gh_username(), "gaborcsardi")
 })
