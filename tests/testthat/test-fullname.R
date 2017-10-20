@@ -16,7 +16,7 @@ test_that("fullname fallback", {
 
 test_that("fullname works", {
 
-  try(fn <- fullname(), silent = TRUE)
+  fn <- try(fullname(), silent = TRUE)
   if (!inherits(fn, "try-error")) {
     expect_equal(class(fn), "character")
     expect_equal(length(fn), 1)
