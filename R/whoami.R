@@ -203,7 +203,7 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
 
     resp <- GET(
       url,
-      add_headers("user-agent" = "https://github.com/gaborcsardi/whoami",
+      add_headers("user-agent" = "https://github.com/r-lib/whoami",
                   'accept' = 'application/vnd.github.v3+json',
                   .headers = auth)
     )

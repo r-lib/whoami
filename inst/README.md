@@ -3,10 +3,11 @@
 
 # whoami
 
-[![Linux Build Status](https://travis-ci.org/gaborcsardi/whoami.svg?branch=master)](https://travis-ci.org/gaborcsardi/whoami)
-[![Windows Build status](https://ci.appveyor.com/api/projects/status/github/gaborcsardi/whoami?svg=true)](https://ci.appveyor.com/project/gaborcsardi/whoami)
+[![Linux Build Status](https://travis-ci.org/r-lib/whoami.svg?branch=master)](https://travis-ci.org/r-lib/whoami)
+[![Windows Build status](https://ci.appveyor.com/api/projects/status/github/r-lib/whoami?svg=true)](https://ci.appveyor.com/project/gaborcsardi/whoami)
 [![](http://www.r-pkg.org/badges/version/whoami)](http://www.r-pkg.org/pkg/whoami)
 [![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/whoami)](http://www.r-pkg.org/pkg/whoami)
+[![Coverage Status](https://img.shields.io/codecov/c/github/r-lib/whoami/master.svg)](https://codecov.io/github/r-lib/whoami?branch=master)
 
 > Username, full name, email address, GitHub username of the current user
 
@@ -33,7 +34,7 @@ Related JavaScript packages:
 
 
 ```r
-devtools::install_github("gaborcsardi/whoami")
+devtools::install_github("r-lib/whoami")
 ```
 
 ## Usage

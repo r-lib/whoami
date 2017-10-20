@@ -7,8 +7,8 @@ Description: Look up the username and full name of the current user,
     the current user's email address and 'GitHub' username,
     using various sources of system and configuration information.
 License: MIT + file LICENSE
-URL: https://github.com/gaborcsardi/whoami#readme
-BugReports: https://github.com/gaborcsardi/whoami/issues
+URL: https://github.com/r-lib/whoami#readme
+BugReports: https://github.com/r-lib/whoami/issues
 Imports: 
     httr,
     jsonlite,
