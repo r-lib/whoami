@@ -103,7 +103,20 @@ fullname <- function(fallback = NULL) {
       user <- system("git config --global user.name", intern = TRUE)
       user <- str_trim(user)
     }), silent = TRUE)
-    if (ok(user)) return(user)
+    if (ok(user)){
+      return(user)
+    } else{
+      user <- try(suppressWarnings({
+        user <- system(paste0("git config --file ",
+                              file.path(Sys.getenv("USERPROFILE"),
+                                        ".gitconfig"),
+                              " user.name"), intern = TRUE)
+        user <- str_trim(user)
+      }), silent = TRUE)
+      if(ok(user)){
+        return(user)
+      }
+    }
 
     user <- try({
       username <- username()
