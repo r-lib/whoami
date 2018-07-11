@@ -103,7 +103,20 @@ fullname <- function(fallback = NULL) {
       user <- system("git config --global user.name", intern = TRUE)
       user <- str_trim(user)
     }), silent = TRUE)
-    if (ok(user)) return(user)
+    if (ok(user)){
+      return(user)
+    } else{
+      user <- try(suppressWarnings({
+        user <- system(paste0("git config --file ",
+                              file.path(Sys.getenv("USERPROFILE"),
+                                        ".gitconfig"),
+                              " user.name"), intern = TRUE)
+        user <- str_trim(user)
+      }), silent = TRUE)
+      if(ok(user)){
+        return(user)
+      }
+    }
 
     user <- try({
       username <- username()
@@ -133,7 +146,20 @@ fullname <- function(fallback = NULL) {
     user <- system("git config --global user.name", intern = TRUE)
     user <- str_trim(user)
   }), silent = TRUE)
-  if (ok(user)) return(user)
+  if (ok(user)){
+    return(user)
+  } else{
+    user <- try(suppressWarnings({
+      user <- system(paste0("git config --file ",
+                            file.path(Sys.getenv("USERPROFILE"),
+                                      ".gitconfig"),
+                            " user.name"), intern = TRUE)
+      user <- str_trim(user)
+    }), silent = TRUE)
+    if(ok(user)){
+      return(user)
+    }
+  }
 
   fallback_or_stop(fallback, "Cannot determine full name")
 }
@@ -158,7 +184,20 @@ email_address <- function(fallback = NULL) {
     email <- system("git config --global user.email", intern = TRUE)
     email <- str_trim(email)
   }), silent = TRUE)
-  if (ok(email)) return(email)
+  if (ok(email)){
+    return(email)
+  } else{
+    user <- try(suppressWarnings({
+      email <- system(paste0("git config --file ",
+                            file.path(Sys.getenv("USERPROFILE"),
+                                      ".gitconfig"),
+                            " user.email"), intern = TRUE)
+      email <- str_trim(email)
+    }), silent = TRUE)
+    if(ok(email)){
+      return(email)
+    }
+  }
 
   fallback_or_stop(fallback, "Cannot get email address")
 }
