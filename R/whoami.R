@@ -165,7 +165,8 @@ email_address <- function(fallback = NULL) {
 
 #' Find the current user's GitHub username
 #'
-#' Searches on GitHub, for the user's email address, see
+#' Uses the \code{GITHUB_USERNAME} global variable or searches on GitHub,
+#'  for the user's email address, see
 #' \code{\link{email_address}}.
 #'
 #' @param token GitHub token to use. By default it uses
@@ -187,37 +188,44 @@ email_address <- function(fallback = NULL) {
 
 gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
                         fallback = NULL) {
-  email <- try(email_address(), silent = TRUE)
-  if (ok(email)) {
-    if (! grepl('@', email)) {
-      return(fallback_or_stop(
-        fallback,
-        "This does not seem to be an email address"
-      ))
-    }
-    url <- URLencode(paste0(gh_url, "/search/users?q=", email,
-                            " in:email"))
-
-    auth <- character()
-    if (token != "") auth <- c("Authorization" = paste("token", token))
-
-    resp <- GET(
-      url,
-      add_headers("user-agent" = "https://github.com/r-lib/whoami",
-                  'accept' = 'application/vnd.github.v3+json',
-                  .headers = auth)
-    )
-    if (status_code(resp) >= 300) {
-      return(fallback_or_stop(fallback, "Cannot find GitHub username"))
-    }
-    data <- fromJSON(content(resp, as = "text"), simplifyVector = FALSE)
-    if (data$total_count == 0) {
-      return(
-        fallback_or_stop(fallback, "Cannot find GitHub username for email")
+  # try reading username from global variable
+  env_gh_username <- Sys.getenv("GITHUB_USERNAME")
+  
+  if(env_gh_username == ""){
+    email <- try(email_address(), silent = TRUE)
+    if (ok(email)) {
+      if (! grepl('@', email)) {
+        return(fallback_or_stop(
+          fallback,
+          "This does not seem to be an email address"
+        ))
+      }
+      url <- URLencode(paste0(gh_url, "/search/users?q=", email,
+                              " in:email"))
+      
+      auth <- character()
+      if (token != "") auth <- c("Authorization" = paste("token", token))
+      
+      resp <- GET(
+        url,
+        add_headers("user-agent" = "https://github.com/r-lib/whoami",
+                    'accept' = 'application/vnd.github.v3+json',
+                    .headers = auth)
       )
+      if (status_code(resp) >= 300) {
+        return(fallback_or_stop(fallback, "Cannot find GitHub username"))
+      }
+      data <- fromJSON(content(resp, as = "text"), simplifyVector = FALSE)
+      if (data$total_count == 0) {
+        return(
+          fallback_or_stop(fallback, "Cannot find GitHub username for email")
+        )
+      }
+      
+      return(data$items[[1]]$login)
     }
-
-    return(data$items[[1]]$login)
+  }else{
+    return(env_gh_username)
   }
 
   fallback_or_stop(fallback, "Cannot get GitHub username")

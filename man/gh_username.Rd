@@ -18,7 +18,8 @@ error.}
 GitHub username, or an error is thrown if it cannot be found.
 }
 \description{
-Searches on GitHub, for the user's email address, see
+Uses the \code{GITHUB_USERNAME} global variable or searches on GitHub,
+ for the user's email address, see
 \code{\link{email_address}}.
 }
 \examples{

@@ -26,7 +26,7 @@ also tries the user's global git configuration.
 
 For the email address it users the user's global git configuration.
 
-For the GitHub usename it searches on GitHub for the user's email
+For the GitHub username it uses the `GITHUB_USERNAME` environment variable then it tries searching on GitHub for the user's email
 address.
 
 Related JavaScript packages:
