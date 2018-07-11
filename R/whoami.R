@@ -219,7 +219,7 @@ email_address <- function(fallback = NULL) {
 #' @export
 #' @importFrom httr GET add_headers status_code content
 #' @importFrom jsonlite fromJSON
-#' @importFrom utils URLencode
+#' @importFrom utils URLencode assignInNamespace
 #' @examples
 #' \dontrun{
 #' gh_username()
@@ -240,7 +240,7 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
         ))
       }
       
-      if(!exists("get_gh_username", where = "whoami")){
+      if(!exists("get_gh_username", where = asNamespace("whoami"))){
         get_gh_username <- .get_gh_username()
         assignInNamespace("get_gh_username",
                           get_gh_username,
