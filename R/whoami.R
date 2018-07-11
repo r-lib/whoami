@@ -239,35 +239,57 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
           "This does not seem to be an email address"
         ))
       }
-      url <- URLencode(paste0(gh_url, "/search/users?q=", email,
-                              " in:email"))
       
-      auth <- character()
-      if (token != "") auth <- c("Authorization" = paste("token", token))
-      
-      resp <- GET(
-        url,
-        add_headers("user-agent" = "https://github.com/r-lib/whoami",
-                    'accept' = 'application/vnd.github.v3+json',
-                    .headers = auth)
-      )
-      if (status_code(resp) >= 300) {
-        return(fallback_or_stop(fallback, "Cannot find GitHub username"))
-      }
-      data <- fromJSON(content(resp, as = "text"), simplifyVector = FALSE)
-      if (data$total_count == 0) {
-        return(
-          fallback_or_stop(fallback, "Cannot find GitHub username for email")
-        )
+      if(!exists("get_gh_username", where = "whoami")){
+        get_gh_username <- .get_gh_username()
+        assignInNamespace("get_gh_username",
+                          get_gh_username,
+                          ns = "whoami")
       }
       
-      return(data$items[[1]]$login)
+      get_gh_username(email, token)
     }
   }else{
     return(env_gh_username)
   }
 
   fallback_or_stop(fallback, "Cannot get GitHub username")
+}
+
+
+.get_gh_username <- function(email, token){
+  username <- ""
+  function(email, token){
+    if(username == ""){
+      url <- URLencode(paste0(gh_url, "/search/users?q=", email,
+                              " in:email"))
+      
+      auth <- character()
+      if (token != "") auth <- c("Authorization" = paste("token", token))
+      
+      resp <- httr::GET(
+        url,
+        httr::add_headers("user-agent" = "https://github.com/r-lib/whoami",
+                    'accept' = 'application/vnd.github.v3+json',
+                    .headers = auth)
+      )
+      if (httr::status_code(resp) >= 300) {
+        return(fallback_or_stop(fallback, "Cannot find GitHub username"))
+      }
+      data <- jsonlite::fromJSON(httr::content(resp, as = "text"), 
+                                 simplifyVector = FALSE)
+      if (data$total_count == 0) {
+        return(
+          fallback_or_stop(fallback, "Cannot find GitHub username for email")
+        )
+      }
+      username <<- data$items[[1]]$login
+      
+    }
+    username
+  }
+
+  
 }
 
 #' User name and full name of the current user
