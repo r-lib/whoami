@@ -240,7 +240,9 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
         ))
       }
       
-      if(!exists("get_gh_username", where = asNamespace("whoami"))){
+      if(!exists("get_gh_username", 
+                 where = 'package:whoami',
+                 mode = 'function')){
         get_gh_username <- .get_gh_username()
         assignInNamespace("get_gh_username",
                           get_gh_username,
