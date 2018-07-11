@@ -219,7 +219,7 @@ email_address <- function(fallback = NULL) {
 #' @export
 #' @importFrom httr GET add_headers status_code content
 #' @importFrom jsonlite fromJSON
-#' @importFrom utils URLencode assignInNamespace
+#' @importFrom utils URLencode assignInMyNamespace
 #' @examples
 #' \dontrun{
 #' gh_username()
