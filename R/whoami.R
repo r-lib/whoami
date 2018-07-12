@@ -247,6 +247,9 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
                           .get_gh_username())
       }
       
+      get_gh_username <- getFromNamespace("get_gh_username",
+                                          ns = 'package:whoami')
+      
       get_gh_username(email, token)
     }
   }else{
