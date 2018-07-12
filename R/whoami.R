@@ -250,7 +250,7 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
       get_gh_username <- getFromNamespace("get_gh_username",
                                           ns = 'package:whoami')
       
-      get_gh_username(email, token)
+      get_gh_username(email, token, fallback)
     }
   }else{
     return(env_gh_username)
@@ -260,9 +260,11 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
 }
 
 
-.get_gh_username <- function(email, token){
+# closure to cache GitHub results
+.get_gh_username <- function(email, token, fallback){
   username <- ""
-  function(email, token){
+  function(email, token, fallback){
+    # only re-query if the username is empty
     if(username == ""){
       url <- URLencode(paste0(gh_url, "/search/users?q=", email,
                               " in:email"))
