@@ -262,10 +262,10 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
 
 # closure to cache GitHub results
 .get_gh_username <- function(email, token, fallback){
-  username <- ""
+  usernames <- c()
   function(email, token, fallback){
     # only re-query if the username is empty
-    if(username == ""){
+    if(!email %in% names(usernames)){
       url <- URLencode(paste0(gh_url, "/search/users?q=", email,
                               " in:email"))
       
@@ -288,10 +288,10 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
           fallback_or_stop(fallback, "Cannot find GitHub username for email")
         )
       }
-      username <<- data$items[[1]]$login
+      usernames[email] <<- data$items[[1]]$login
       
     }
-    username
+    usernames[email]
   }
 
   
