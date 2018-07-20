@@ -18,9 +18,12 @@ test_that("Github username works", {
     skip("No internet, skipping")
   }
 
-  mockery::stub(gh_email, "email_address", "csardi.gabor@gmail.com")
-  expect_equal(gh_username(), "gaborcsardi")
-  
+  with_mock(
+    email_adress = "csardi.gabor@gmail.com",
+    .env = "whoami",
+    expect_equal(gh_username(), "gaborcsardi")
+  )
+
   # when there's an environment variable
   # GITHUB_USERNAME
   with_mock(
