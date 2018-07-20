@@ -219,7 +219,7 @@ email_address <- function(fallback = NULL) {
 #' @export
 #' @importFrom httr GET add_headers status_code content
 #' @importFrom jsonlite fromJSON
-#' @importFrom utils URLencode
+#' @importFrom utils URLencode assignInMyNamespace getFromNamespace
 #' @examples
 #' \dontrun{
 #' gh_username()
@@ -239,35 +239,72 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
           "This does not seem to be an email address"
         ))
       }
+      
+      # we try getting the username
+      # not sure yet whether it's the default function
+      # and whether it's still the right email address
+      username <- get_gh_username(email, token, fallback)
+      
+      if(username == "issues"| # default function
+         names(username) != email){  #not right email address
+        # create a new function
+        assignInMyNamespace("get_gh_username",
+                          .get_gh_username())
+        # assign it
+        get_gh_username <- getFromNamespace("get_gh_username",
+                                            ns = 'whoami')
+        # get the username from there
+        username <- get_gh_username(email, token, fallback)
+        
+      }
+      
+      # remove the email that was attached to the username
+      return(as.character(username))
+    }
+  }else{
+    return(env_gh_username)
+  }
+  fallback_or_stop(fallback, "Cannot get GitHub username")
+}
+
+
+# closure to cache GitHub results
+.get_gh_username <- function(email, token, fallback){
+  username <- ""
+  function(email, token, fallback){
+    if(username == ""){
+    # only re-query if the username is empty
       url <- URLencode(paste0(gh_url, "/search/users?q=", email,
                               " in:email"))
       
       auth <- character()
       if (token != "") auth <- c("Authorization" = paste("token", token))
       
-      resp <- GET(
+      resp <- httr::GET(
         url,
-        add_headers("user-agent" = "https://github.com/r-lib/whoami",
+        httr::add_headers("user-agent" = "https://github.com/r-lib/whoami",
                     'accept' = 'application/vnd.github.v3+json',
                     .headers = auth)
       )
-      if (status_code(resp) >= 300) {
+      if (httr::status_code(resp) >= 300) {
         return(fallback_or_stop(fallback, "Cannot find GitHub username"))
       }
-      data <- fromJSON(content(resp, as = "text"), simplifyVector = FALSE)
+      data <- jsonlite::fromJSON(httr::content(resp, as = "text"), 
+                                 simplifyVector = FALSE)
       if (data$total_count == 0) {
         return(
           fallback_or_stop(fallback, "Cannot find GitHub username for email")
         )
       }
-      
-      return(data$items[[1]]$login)
+      username_from_gh <- data$items[[1]]$login
+      names(username_from_gh) <- email
+      username <<- username_from_gh
     }
-  }else{
-    return(env_gh_username)
+    
+    username
   }
 
-  fallback_or_stop(fallback, "Cannot get GitHub username")
+  
 }
 
 #' User name and full name of the current user
@@ -290,4 +327,13 @@ whoami <- function() {
     "email_address" = email_address(),
     "gh_username" = gh_username()
     )
+}
+
+# need a function to be replaced
+# returns an impossible username
+# and returns the email as name
+get_gh_username <- function(email, token, fallback){
+  res <- "issues"
+  names(res) <- email
+  res
 }
