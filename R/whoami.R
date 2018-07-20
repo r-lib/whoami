@@ -240,18 +240,26 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
         ))
       }
       
+      # we try getting the username
+      # not sure yet whether it's the default function
+      # and whether it's still the right email address
+      username <- get_gh_username(email, token, fallback)
       
-      
-      if(get_gh_username() == "issues"){
+      if(username == "issues"| # default function
+         names(username) != email){  #not right email address
+        # create a new function
         assignInMyNamespace("get_gh_username",
                           .get_gh_username())
+        # assign it
+        get_gh_username <- getFromNamespace("get_gh_username",
+                                            ns = 'whoami')
+        # get the username from there
+        username <- get_gh_username(email, token, fallback)
+        
       }
       
-      get_gh_username <- getFromNamespace("get_gh_username",
-                                          ns = 'whoami')
-      
-      return(as.character(
-        get_gh_username(email, token, fallback)))
+      # remove the email that was attached to the username
+      return(as.character(username))
     }
   }else{
     return(env_gh_username)
@@ -262,10 +270,10 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
 
 # closure to cache GitHub results
 .get_gh_username <- function(email, token, fallback){
-  usernames <- c()
+  username <- ""
   function(email, token, fallback){
+    if(username == ""){
     # only re-query if the username is empty
-    if(!email %in% names(usernames)){
       url <- URLencode(paste0(gh_url, "/search/users?q=", email,
                               " in:email"))
       
@@ -288,10 +296,12 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
           fallback_or_stop(fallback, "Cannot find GitHub username for email")
         )
       }
-      usernames[email] <<- data$items[[1]]$login
-      
+      username_from_gh <- data$items[[1]]$login
+      names(username_from_gh) <- email
+      username <<- username_from_gh
     }
-    usernames[email]
+    
+    username
   }
 
   
@@ -319,6 +329,11 @@ whoami <- function() {
     )
 }
 
-get_gh_username <- function(){
-  "issues"
+# need a function to be replaced
+# returns an impossible username
+# and returns the email as name
+get_gh_username <- function(email, token, fallback){
+  res <- "issues"
+  names(res) <- email
+  res
 }
