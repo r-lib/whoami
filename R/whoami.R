@@ -240,22 +240,22 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
         ))
       }
       
-      if(!exists("get_gh_username", 
-                 where = 'package:whoami',
-                 mode = 'function')){
+      
+      
+      if(get_gh_username() == "issues"){
         assignInMyNamespace("get_gh_username",
                           .get_gh_username())
       }
       
       get_gh_username <- getFromNamespace("get_gh_username",
-                                          ns = 'package:whoami')
+                                          ns = 'whoami')
       
-      get_gh_username(email, token, fallback)
+      return(as.character(
+        get_gh_username(email, token, fallback)))
     }
   }else{
     return(env_gh_username)
   }
-
   fallback_or_stop(fallback, "Cannot get GitHub username")
 }
 
@@ -317,4 +317,8 @@ whoami <- function() {
     "email_address" = email_address(),
     "gh_username" = gh_username()
     )
+}
+
+get_gh_username <- function(){
+  "issues"
 }
