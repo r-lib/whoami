@@ -19,7 +19,8 @@ test_that("Github username works", {
   }
 
   with_mock(
-    email_address = "csardi.gabor@gmail.com",
+    email_address = function(){
+      "csardi.gabor@gmail.com"},
     .env = "whoami",
     expect_equal(gh_username(), "gaborcsardi")
   )
