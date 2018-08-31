@@ -22,6 +22,10 @@ Uses the \code{GITHUB_USERNAME} global variable or searches on GitHub,
  for the user's email address, see
 \code{\link{email_address}}.
 }
+\details{
+This function caches the username, so if the email addess of the user
+is unchanged, it does not perform a GitHub query.
+}
 \examples{
 \dontrun{
 gh_username()
@@ -32,3 +36,4 @@ Other user names: \code{\link{email_address}},
   \code{\link{fullname}}, \code{\link{username}},
   \code{\link{whoami}}
 }
+\concept{user names}

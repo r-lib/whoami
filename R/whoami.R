@@ -1,4 +1,23 @@
 
+.onLoad <- function(libname, pkgname) {
+  lookup_gh_username <<- memoize_first(lookup_gh_username)
+}
+
+is_string <- function(x) {
+  is.character(x) && length(x) == 1 && !is.na(x)
+}
+
+memoize_first <- function(fun) {
+  fun
+  cache <- list()
+  dec <- function(arg, ...) {
+    if (!is_string(arg)) return(fun(arg, ...))
+    if (is.null(cache[[arg]])) cache[[arg]] <<- fun(arg, ...)
+    cache[[arg]]
+  }
+  dec
+}
+
 gh_url <- "https://api.github.com"
 
 ok <- function(x) {
@@ -128,9 +147,9 @@ fullname <- function(fallback = NULL) {
       user <- sub("FullName", "", user)
       user <- str_trim(paste(user, collapse = ""))
     }, silent = TRUE)
-    
+
     if (ok(user)) return(user)
-    
+
   } else {
     user <- try({
       user <- system("getent passwd $(whoami)", intern = TRUE)
@@ -171,7 +190,7 @@ fullname <- function(fallback = NULL) {
 #' @param fallback If not \code{NULL} then this value is returned
 #'   if the email address cannot be found, instead of triggering an error.
 #' @return Email address on success. Otherwise an error is thrown.
-#' 
+#'
 #' @family user names
 #' @export
 #' @examples
@@ -208,13 +227,16 @@ email_address <- function(fallback = NULL) {
 #'  for the user's email address, see
 #' \code{\link{email_address}}.
 #'
+#' This function caches the username, so if the email addess of the user
+#' is unchanged, it does not perform a GitHub query.
+#'
 #' @param token GitHub token to use. By default it uses
 #'   the \code{GITHUB_TOKEN} environment variable, if set.
 #' @param fallback If not \code{NULL} then this value is returned
 #'   if the GitHub username cannot be found, instead of triggering an
 #'   error.
 #' @return GitHub username, or an error is thrown if it cannot be found.
-#' 
+#'
 #' @family user names
 #' @export
 #' @importFrom httr GET add_headers status_code content
@@ -229,45 +251,47 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
                         fallback = NULL) {
   # try reading username from global variable
   env_gh_username <- Sys.getenv("GITHUB_USERNAME")
+  if (nzchar(env_gh_username)) return(env_gh_username)
   
-  if(env_gh_username == ""){
-    email <- try(email_address(), silent = TRUE)
-    if (ok(email)) {
-      if (! grepl('@', email)) {
-        return(fallback_or_stop(
-          fallback,
-          "This does not seem to be an email address"
-        ))
-      }
-      url <- URLencode(paste0(gh_url, "/search/users?q=", email,
-                              " in:email"))
-      
-      auth <- character()
-      if (token != "") auth <- c("Authorization" = paste("token", token))
-      
-      resp <- GET(
-        url,
-        add_headers("user-agent" = "https://github.com/r-lib/whoami",
-                    'accept' = 'application/vnd.github.v3+json',
-                    .headers = auth)
-      )
-      if (status_code(resp) >= 300) {
-        return(fallback_or_stop(fallback, "Cannot find GitHub username"))
-      }
-      data <- fromJSON(content(resp, as = "text"), simplifyVector = FALSE)
-      if (data$total_count == 0) {
-        return(
-          fallback_or_stop(fallback, "Cannot find GitHub username for email")
-        )
-      }
-      
-      return(data$items[[1]]$login)
+  email <- try(email_address(), silent = TRUE)
+  if (ok(email)) {
+    if (! grepl('@', email)) {
+      return(fallback_or_stop(
+        fallback,
+        "This does not seem to be an email address"
+      ))
     }
-  }else{
-    return(env_gh_username)
+    lookup_gh_username(email, token)
+
+  } else {
+    fallback_or_stop(fallback, "Cannot get GitHub username")
+  }
+}
+
+lookup_gh_username <- function(email, token) {
+  url <- URLencode(paste0(gh_url, "/search/users?q=", email,
+                          " in:email"))
+
+  auth <- character()
+  if (token != "") auth <- c("Authorization" = paste("token", token))
+
+  resp <- GET(
+    url,
+    add_headers("user-agent" = "https://github.com/r-lib/whoami",
+                'accept' = 'application/vnd.github.v3+json',
+                .headers = auth)
+  )
+  if (status_code(resp) >= 300) {
+    return(fallback_or_stop(fallback, "Cannot find GitHub username"))
+  }
+  data <- fromJSON(content(resp, as = "text"), simplifyVector = FALSE)
+  if (data$total_count == 0) {
+    return(
+      fallback_or_stop(fallback, "Cannot find GitHub username for email")
+    )
   }
 
-  fallback_or_stop(fallback, "Cannot get GitHub username")
+  data$items[[1]]$login
 }
 
 #' User name and full name of the current user

@@ -28,3 +28,4 @@ Other user names: \code{\link{email_address}},
   \code{\link{fullname}}, \code{\link{gh_username}},
   \code{\link{whoami}}
 }
+\concept{user names}
