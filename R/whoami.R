@@ -227,8 +227,9 @@ email_address <- function(fallback = NULL) {
 #'  for the user's email address, see
 #' \code{\link{email_address}}.
 #'
-#' This function caches the username, so if the email addess of the user
-#' is unchanged, it does not perform a GitHub query.
+#' This function caches the username in the current R session, and if the
+#' email address of the user is unchanged, it does not perform another
+#' GitHub query.
 #'
 #' @param token GitHub token to use. By default it uses
 #'   the \code{GITHUB_TOKEN} environment variable, if set.

@@ -23,8 +23,9 @@ Uses the \code{GITHUB_USERNAME} global variable or searches on GitHub,
 \code{\link{email_address}}.
 }
 \details{
-This function caches the username, so if the email addess of the user
-is unchanged, it does not perform a GitHub query.
+This function caches the username in the current R session, and if the
+email address of the user is unchanged, it does not perform another
+GitHub query.
 }
 \examples{
 \dontrun{
