@@ -13,6 +13,20 @@ A named character vector with entries: \code{username},
 \description{
 Calls \code{\link{username}} and \code{\link{fullname}}.
 }
+\details{
+For the username it tries the `LOGNAME`, `USER`, `LNAME` and
+`USERNAME` environment variables first. If these are all unset,
+or set to an empty string, then it tries running `id` on Unix-like
+systems and `whoami` on Windows.
+
+For the full name of the user, it queries the system services and
+also tries the user's global git configuration. On Windows, it tries finding the global git configuration in `Sys.getenv("USERPROFILE")` if it doesn't find it in `Sys.getenv("HOME")` (often "Documents").
+
+For the email address it uses the user's global git configuration. It tries finding the global git configuration in `Sys.getenv("USERPROFILE")` if it doesn't find it in `Sys.getenv("HOME")`.
+
+For the GitHub username it uses the `GITHUB_USERNAME` environment variable then it tries searching on GitHub for the user's email
+address.
+}
 \examples{
 \dontrun{
 whoami()
