@@ -232,6 +232,7 @@ email_address <- function(fallback = NULL) {
 #' GitHub query.
 #'
 #' @param token GitHub token to use. By default it uses
+#' the \code{GITHUB_PAT} environment variable or
 #'   the \code{GITHUB_TOKEN} environment variable, if set.
 #' @param fallback If not \code{NULL} then this value is returned
 #'   if the GitHub username cannot be found, instead of triggering an
@@ -248,7 +249,7 @@ email_address <- function(fallback = NULL) {
 #' gh_username()
 #' }
 
-gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
+gh_username <- function(token = NULL,
                         fallback = NULL) {
   # try reading username from global variable
   env_gh_username <- Sys.getenv("GITHUB_USERNAME")
@@ -273,8 +274,15 @@ lookup_gh_username <- function(email, token) {
   url <- URLencode(paste0(gh_url, "/search/users?q=", email,
                           " in:email"))
 
+  if(is.null(token)){
+    tokens <- Sys.getenv(c("GITHUB_PAT", "GITHUB_TOKEN"))
+    token <- tokens[nzchar(tokens)][1]
+  }
+  
+  
+  
   auth <- character()
-  if (token != "") auth <- c("Authorization" = paste("token", token))
+  if (!is.na(token)) auth <- c("Authorization" = paste("token", token))
 
   resp <- GET(
     url,
