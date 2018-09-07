@@ -5,6 +5,8 @@
 
 * `gh_username()` uses the `GITHUB_USERNAME` environment variable, if it
   it is set (#6, @maelle)
+  
+* On Windows, `gh_fullname` and `gh_email_address` try finding the global git configuration in `Sys.getenv("USERPROFILE")` if it is not found in `Sys.getenv("HOME")` (#7, @maelle)
 
 # 1.1.2
 

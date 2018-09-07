@@ -1,8 +1,13 @@
 Package: whoami
 Title: Username, Full Name, Email Address, 'GitHub' Username of the Current User
 Version: 1.1.2.9000
-Author: Gábor Csárdi
-Maintainer: Gábor Csárdi <csardi.gabor@gmail.com>
+Authors@R: c(person(given = "Gábor",
+                    family = "Csárdi", 
+                    email = "csardi.gabor@gmail.com", 
+                    role = c("aut", "cre")),
+            person(given = "Maëlle",
+                   family = "Salmon",
+                    role = "ctb"))
 Description: Look up the username and full name of the current user,
     the current user's email address and 'GitHub' username,
     using various sources of system and configuration information.
