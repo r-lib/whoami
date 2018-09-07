@@ -17,11 +17,11 @@ or set to an empty string, then it tries running `id` on Unix-like
 systems and `whoami` on Windows.
 
 For the full name of the user, it queries the system services and
-also tries the user's global git configuration.
+also tries the user's global git configuration. On Windows, it tries finding the global git configuration in `Sys.getenv("USERPROFILE")` if it doesn't find it in `Sys.getenv("HOME")` (often "Documents").
 
-For the email address it users the user's global git configuration.
+For the email address it uses the user's global git configuration. It tries finding the global git configuration in `Sys.getenv("USERPROFILE")` if it doesn't find it in `Sys.getenv("HOME")`.
 
-For the GitHub usename it searches on GitHub for the user's email
+For the GitHub username it uses the `GITHUB_USERNAME` environment variable then it tries searching on GitHub for the user's email
 address.
 
 Related JavaScript packages:
