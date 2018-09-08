@@ -62,11 +62,11 @@ fallback_or_stop <- function(fallback, msg) {
 #' }
 
 username <- function(fallback = NULL) {
-
+  
   e <- Sys.getenv()
   user <- e["LOGNAME"] %or% e["USER"] %or% e["LNAME"] %or% e["USERNAME"]
   if (ok(user)) return(as.vector(user))
-
+  
   if (.Platform$OS.type == "unix") {
     user <- try(str_trim(system("id -un", intern = TRUE)), silent = TRUE)
     if (ok(user)) return(user)
@@ -109,14 +109,14 @@ fullname <- function(fallback = NULL) {
       user <- strsplit(user, ":")[[1]][8]
     }, silent = TRUE)
     if (ok(user)) return(user)
-
+    
     user <- try({
       user <- system("osascript -e \"long user name of (system info)\"",
                      intern = TRUE)
       user <- str_trim(user)
     }, silent = TRUE)
     if (ok(user)) return(user)
-
+    
   } else if (.Platform$OS.type == "windows") {
     user <- try(suppressWarnings({
       user <- system("git config --global user.name", intern = TRUE)
@@ -136,7 +136,7 @@ fullname <- function(fallback = NULL) {
         return(user)
       }
     }
-
+    
     user <- try({
       username <- username()
       user <- system(
@@ -147,9 +147,9 @@ fullname <- function(fallback = NULL) {
       user <- sub("FullName", "", user)
       user <- str_trim(paste(user, collapse = ""))
     }, silent = TRUE)
-
+    
     if (ok(user)) return(user)
-
+    
   } else {
     user <- try({
       user <- system("getent passwd $(whoami)", intern = TRUE)
@@ -158,9 +158,9 @@ fullname <- function(fallback = NULL) {
       user <- sub(",.*", "")
     }, silent = TRUE)
     if (ok(user)) return(user)
-
+    
   }
-
+  
   user <- try(suppressWarnings({
     user <- system("git config --global user.name", intern = TRUE)
     user <- str_trim(user)
@@ -179,7 +179,7 @@ fullname <- function(fallback = NULL) {
       return(user)
     }
   }
-
+  
   fallback_or_stop(fallback, "Cannot determine full name")
 }
 
@@ -208,16 +208,16 @@ email_address <- function(fallback = NULL) {
   } else{
     user <- try(suppressWarnings({
       email <- system(paste0("git config --file ",
-                            file.path(Sys.getenv("USERPROFILE"),
-                                      ".gitconfig"),
-                            " user.email"), intern = TRUE)
+                             file.path(Sys.getenv("USERPROFILE"),
+                                       ".gitconfig"),
+                             " user.email"), intern = TRUE)
       email <- str_trim(email)
     }), silent = TRUE)
     if(ok(email)){
       return(email)
     }
   }
-
+  
   fallback_or_stop(fallback, "Cannot get email address")
 }
 
@@ -233,6 +233,8 @@ email_address <- function(fallback = NULL) {
 #'
 #' @param token GitHub token to use. By default it uses
 #'   the \code{GITHUB_TOKEN} environment variable, if set.
+#'    If unset it uses the \code{GITHUB_PAT} environment 
+#'    variable, if set.
 #' @param fallback If not \code{NULL} then this value is returned
 #'   if the GitHub username cannot be found, instead of triggering an
 #'   error.
@@ -248,7 +250,7 @@ email_address <- function(fallback = NULL) {
 #' gh_username()
 #' }
 
-gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
+gh_username <- function(token = NULL,
                         fallback = NULL) {
   # try reading username from global variable
   env_gh_username <- Sys.getenv("GITHUB_USERNAME")
@@ -263,7 +265,7 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
       ))
     }
     lookup_gh_username(email, token)
-
+    
   } else {
     fallback_or_stop(fallback, "Cannot get GitHub username")
   }
@@ -272,10 +274,14 @@ gh_username <- function(token = Sys.getenv("GITHUB_TOKEN"),
 lookup_gh_username <- function(email, token) {
   url <- URLencode(paste0(gh_url, "/search/users?q=", email,
                           " in:email"))
-
+  
+  if(is.null(token)){
+    token <- Sys.getenv("GITHUB_TOKEN", Sys.getenv("GITHUB_PAT"))
+  }
+  
   auth <- character()
   if (token != "") auth <- c("Authorization" = paste("token", token))
-
+  
   resp <- GET(
     url,
     add_headers("user-agent" = "https://github.com/r-lib/whoami",
@@ -291,7 +297,7 @@ lookup_gh_username <- function(email, token) {
       fallback_or_stop(fallback, "Cannot find GitHub username for email")
     )
   }
-
+  
   data$items[[1]]$login
 }
 
@@ -335,5 +341,5 @@ whoami <- function() {
     "fullname" = fullname(),
     "email_address" = email_address(),
     "gh_username" = gh_username()
-    )
+  )
 }
