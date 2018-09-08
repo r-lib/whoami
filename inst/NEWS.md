@@ -8,6 +8,9 @@
   
 * On Windows, `gh_fullname` and `gh_email_address` try finding the global git configuration in `Sys.getenv("USERPROFILE")` if it is not found in `Sys.getenv("HOME")` (#7, @maelle)
 
+* If GITHUB_PAT is set `lookup_gh_username` will use it, 
+it no longer only uses GITHUB_TOKEN (#9, @maelle)
+
 # 1.1.2
 
 Maintainence release, no user visible changes
