@@ -1,5 +1,5 @@
 
-# devel
+# 1.2.0
 
 * `gh_username()` caches the result, separately for each email address.
 
