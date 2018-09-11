@@ -1,6 +1,6 @@
 Package: whoami
 Title: Username, Full Name, Email Address, 'GitHub' Username of the Current User
-Version: 1.2.0
+Version: 1.2.0.9000
 Authors@R: c(person(given = "Gábor",
                     family = "Csárdi", 
                     email = "csardi.gabor@gmail.com", 
