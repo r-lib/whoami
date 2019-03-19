@@ -15,8 +15,8 @@ The user name of the current user.
 }
 \description{
 Tries the \code{LOGNAME}, \code{USER}, \code{LNAME}, \code{USERNAME}
-environment variables first. Then it tries the `id` command on Unix-like
-platforms and `whoami` on Windows.
+environment variables first. Then it tries the \code{id} command on Unix-like
+platforms and \code{whoami} on Windows.
 }
 \examples{
 \dontrun{

@@ -9,7 +9,7 @@ gh_username(token = NULL, fallback = NULL)
 \arguments{
 \item{token}{GitHub token to use. By default it uses
 the \code{GITHUB_TOKEN} environment variable, if set.
-If unset, uses the \code{GITHUB_PAT} environment 
+If unset, uses the \code{GITHUB_PAT} environment
 variable, if set.}
 
 \item{fallback}{If not \code{NULL} then this value is returned
@@ -21,7 +21,7 @@ GitHub username, or an error is thrown if it cannot be found.
 }
 \description{
 Uses the \code{GITHUB_USERNAME} global variable or searches on GitHub,
- for the user's email address, see
+for the user's email address, see
 \code{\link{email_address}}.
 }
 \details{
