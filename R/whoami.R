@@ -87,7 +87,8 @@ username <- function(fallback = NULL) {
 
 #' Full name of the current user
 #'
-#' Tries system full names and git configuration as well.
+#' Uses the \code{FULLNAME} environment variable, if set.
+#' Otherwise tries system full names and the git configuration as well.
 #'
 #' @param fallback If not \code{NULL} then this value is returned
 #'   if the full name of the user cannot be found, instead of
@@ -102,6 +103,9 @@ username <- function(fallback = NULL) {
 #' }
 
 fullname <- function(fallback = NULL) {
+
+  if ((x <- Sys.getenv("FULLNAME", "")) != "") return(x)
+
   if (Sys.info()["sysname"] == "Darwin") {
     user <- try({
       user <- system("id -P", intern = TRUE)
@@ -185,7 +189,8 @@ fullname <- function(fallback = NULL) {
 
 #' Email address of the current user
 #'
-#' It tries to find it in the user's global git configuration.
+#' If uses the \code{EMAIL} environment variable, if set.
+#' Otherwise it tries to find it in the user's global git configuration.
 #'
 #' @param fallback If not \code{NULL} then this value is returned
 #'   if the email address cannot be found, instead of triggering an error.
@@ -199,6 +204,9 @@ fullname <- function(fallback = NULL) {
 #' }
 
 email_address <- function(fallback = NULL) {
+
+  if ((x <- Sys.getenv("EMAIL", "")) != "") return(x)
+
   email <- try(suppressWarnings({
     email <- system("git config --global user.email", intern = TRUE)
     email <- str_trim(email)
@@ -233,7 +241,7 @@ email_address <- function(fallback = NULL) {
 #'
 #' @param token GitHub token to use. By default it uses
 #'   the \code{GITHUB_TOKEN} environment variable, if set.
-#'   If unset, uses the \code{GITHUB_PAT} environment 
+#'   If unset, uses the \code{GITHUB_PAT} environment
 #'   variable, if set.
 #' @param fallback If not \code{NULL} then this value is returned
 #'   if the GitHub username cannot be found, instead of triggering an
@@ -255,7 +263,7 @@ gh_username <- function(token = NULL,
   # try reading username from global variable
   env_gh_username <- Sys.getenv("GITHUB_USERNAME")
   if (nzchar(env_gh_username)) return(env_gh_username)
-  
+
   email <- try(email_address(), silent = TRUE)
   if (ok(email)) {
     if (! grepl('@', email)) {
@@ -278,7 +286,7 @@ lookup_gh_username <- function(email, token) {
   if(is.null(token)){
     token <- Sys.getenv("GITHUB_TOKEN", Sys.getenv("GITHUB_PAT"))
   }
-  
+
   auth <- character()
   if (token != "") auth <- c("Authorization" = paste("token", token))
 
@@ -314,26 +322,26 @@ lookup_gh_username <- function(email, token) {
 #' \dontrun{
 #' whoami()
 #' }
-#' @details 
-#' For the username it tries the `LOGNAME`, `USER`, 
+#' @details
+#' For the username it tries the `LOGNAME`, `USER`,
 #' `LNAME` and `USERNAME` environment variables first.
-#'  If these are all unset, or set to an empty string, 
+#'  If these are all unset, or set to an empty string,
 #'  then it tries running `id` on Unix-like
 #' systems and `whoami` on Windows.
-#' 
-#' For the full name of the user, it queries the system services 
-#' and also tries the user's global git configuration. 
-#' On Windows, it tries finding the global git configuration 
-#' in `Sys.getenv("USERPROFILE")` if it doesn't find it 
+#'
+#' For the full name of the user, it queries the system services
+#' and also tries the user's global git configuration.
+#' On Windows, it tries finding the global git configuration
+#' in `Sys.getenv("USERPROFILE")` if it doesn't find it
 #' in `Sys.getenv("HOME")` (often "Documents").
-#' 
-#' For the email address it uses the user's global git 
-#' configuration. It tries finding the global git 
-#' configuration in `Sys.getenv("USERPROFILE")` 
+#'
+#' For the email address it uses the user's global git
+#' configuration. It tries finding the global git
+#' configuration in `Sys.getenv("USERPROFILE")`
 #' if it doesn't find it in `Sys.getenv("HOME")`.
-#' 
-#' For the GitHub username it uses the `GITHUB_USERNAME` 
-#' environment variable then it tries searching on GitHub 
+#'
+#' For the GitHub username it uses the `GITHUB_USERNAME`
+#' environment variable then it tries searching on GitHub
 #' for the user's email address.
 
 whoami <- function() {

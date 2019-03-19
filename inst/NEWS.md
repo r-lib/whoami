@@ -1,6 +1,10 @@
 
 # devel
 
+* Now `fullname()` uses the `FULLNAME` environment variable, if set.
+
+* Now `email_address()` uses the `EMAIL` environment variable, if set.
+
 # 1.2.0
 
 * `gh_username()` caches the result, separately for each email address.

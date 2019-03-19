@@ -23,3 +23,9 @@ test_that("fullname works", {
     expect_match(fn, ".*")
   }
 })
+
+test_that("FULLNAME env var", {
+  expect_equal(
+    withr::with_envvar(c("FULLNAME" = "Bugs Bunny"), fullname()),
+    "Bugs Bunny")
+})

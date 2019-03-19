@@ -15,7 +15,8 @@ triggering an error.}
 The full name of the current user.
 }
 \description{
-Tries system full names and git configuration as well.
+Uses the \code{FULLNAME} environment variable, if set.
+Otherwise tries system full names and the git configuration as well.
 }
 \examples{
 \dontrun{

@@ -14,7 +14,8 @@ if the email address cannot be found, instead of triggering an error.}
 Email address on success. Otherwise an error is thrown.
 }
 \description{
-It tries to find it in the user's global git configuration.
+If uses the \code{EMAIL} environment variable, if set.
+Otherwise it tries to find it in the user's global git configuration.
 }
 \examples{
 \dontrun{
