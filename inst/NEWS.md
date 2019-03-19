@@ -1,5 +1,5 @@
 
-# devel
+# 1.3.0
 
 * Now `fullname()` uses the `FULLNAME` environment variable, if set.
 
