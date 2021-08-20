@@ -1,3 +1,6 @@
+# development version
+
+* `gh_username()` now supports `fallback` (#18, @dpprdan)
 
 # 1.3.0
 

@@ -272,14 +272,14 @@ gh_username <- function(token = NULL,
         "This does not seem to be an email address"
       ))
     }
-    lookup_gh_username(email, token)
+    lookup_gh_username(email, token, fallback)
 
   } else {
     fallback_or_stop(fallback, "Cannot get GitHub username")
   }
 }
 
-lookup_gh_username <- function(email, token) {
+lookup_gh_username <- function(email, token, fallback) {
   url <- URLencode(paste0(gh_url, "/search/users?q=", email,
                           " in:email"))
 
