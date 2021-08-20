@@ -40,7 +40,7 @@ fallback_or_stop <- function(fallback, msg) {
   if (!is.null(fallback)) {
     fallback
   } else {
-    stop(msg)
+    stop(msg, call. = FALSE)
   }
 }
 
