@@ -11,7 +11,9 @@ memoize_first <- function(fun) {
   fun
   cache <- list()
   dec <- function(arg, ...) {
-    if (!is_string(arg)) return(fun(arg, ...))
+    if (!is_string(arg)) {
+      return(fun(arg, ...))
+    }
     if (is.null(cache[[arg]])) cache[[arg]] <<- fun(arg, ...)
     cache[[arg]]
   }
@@ -60,22 +62,30 @@ fallback_or_stop <- function(fallback, msg) {
 #' \dontrun{
 #' username()
 #' }
-
+#'
 username <- function(fallback = NULL) {
-
   e <- Sys.getenv()
   user <- e["LOGNAME"] %or% e["USER"] %or% e["LNAME"] %or% e["USERNAME"]
-  if (ok(user)) return(as.vector(user))
+  if (ok(user)) {
+    return(as.vector(user))
+  }
 
   if (.Platform$OS.type == "unix") {
     user <- try(str_trim(system("id -un", intern = TRUE)), silent = TRUE)
-    if (ok(user)) return(user)
+    if (ok(user)) {
+      return(user)
+    }
   } else if (.Platform$OS.type == "windows") {
-    user <- try({
-      user <- system("whoami", intern = TRUE, show.output.on.console = FALSE)
-      user <- sub("^.*\\\\", "", str_trim(user))
-    }, silent = TRUE)
-    if (ok(user)) return(user)
+    user <- try(
+      {
+        user <- system("whoami", intern = TRUE, show.output.on.console = FALSE)
+        user <- sub("^.*\\\\", "", str_trim(user))
+      },
+      silent = TRUE
+    )
+    if (ok(user)) {
+      return(user)
+    }
   } else {
     return(fallback_or_stop(
       fallback,
@@ -101,85 +111,114 @@ username <- function(fallback = NULL) {
 #' \dontrun{
 #' fullname()
 #' }
-
+#'
 fullname <- function(fallback = NULL) {
-
-  if ((x <- Sys.getenv("FULLNAME", "")) != "") return(x)
+  if ((x <- Sys.getenv("FULLNAME", "")) != "") {
+    return(x)
+  }
 
   if (Sys.info()["sysname"] == "Darwin") {
-    user <- try({
-      user <- system("id -P", intern = TRUE)
-      user <- str_trim(user)
-      user <- strsplit(user, ":")[[1]][8]
-    }, silent = TRUE)
-    if (ok(user)) return(user)
+    user <- try(
+      {
+        user <- system("id -P", intern = TRUE)
+        user <- str_trim(user)
+        user <- strsplit(user, ":")[[1]][8]
+      },
+      silent = TRUE
+    )
+    if (ok(user)) {
+      return(user)
+    }
 
-    user <- try({
-      user <- system("osascript -e \"long user name of (system info)\"",
-                     intern = TRUE)
-      user <- str_trim(user)
-    }, silent = TRUE)
-    if (ok(user)) return(user)
-
+    user <- try(
+      {
+        user <- system("osascript -e \"long user name of (system info)\"",
+          intern = TRUE
+        )
+        user <- str_trim(user)
+      },
+      silent = TRUE
+    )
+    if (ok(user)) {
+      return(user)
+    }
   } else if (.Platform$OS.type == "windows") {
     user <- try(suppressWarnings({
       user <- system("git config --global user.name", intern = TRUE)
       user <- str_trim(user)
     }), silent = TRUE)
-    if (ok(user)){
+    if (ok(user)) {
       return(user)
-    } else{
+    } else {
       user <- try(suppressWarnings({
-        user <- system(paste0("git config --file ",
-                              file.path(Sys.getenv("USERPROFILE"),
-                                        ".gitconfig"),
-                              " user.name"), intern = TRUE)
+        user <- system(paste0(
+          "git config --file ",
+          file.path(
+            Sys.getenv("USERPROFILE"),
+            ".gitconfig"
+          ),
+          " user.name"
+        ), intern = TRUE)
         user <- str_trim(user)
       }), silent = TRUE)
-      if(ok(user)){
+      if (ok(user)) {
         return(user)
       }
     }
 
-    user <- try({
-      username <- username()
-      user <- system(
-        paste0("wmic useraccount where name=\"", username,
-               "\" get fullname"),
-        intern = TRUE
-      )
-      user <- sub("FullName", "", user)
-      user <- str_trim(paste(user, collapse = ""))
-    }, silent = TRUE)
+    user <- try(
+      {
+        username <- username()
+        user <- system(
+          paste0(
+            "wmic useraccount where name=\"", username,
+            "\" get fullname"
+          ),
+          intern = TRUE
+        )
+        user <- sub("FullName", "", user)
+        user <- str_trim(paste(user, collapse = ""))
+      },
+      silent = TRUE
+    )
 
-    if (ok(user)) return(user)
-
+    if (ok(user)) {
+      return(user)
+    }
   } else {
-    user <- try({
-      user <- system("getent passwd $(whoami)", intern = TRUE)
-      user <- str_trim(user)
-      user <- strsplit(user, ":")[[1]][5]
-      user <- sub(",.*", "")
-    }, silent = TRUE)
-    if (ok(user)) return(user)
-
+    user <- try(
+      {
+        user <- system("getent passwd $(whoami)", intern = TRUE)
+        user <- str_trim(user)
+        user <- strsplit(user, ":")[[1]][5]
+        user <- sub(",.*", "")
+      },
+      silent = TRUE
+    )
+    if (ok(user)) {
+      return(user)
+    }
   }
 
   user <- try(suppressWarnings({
     user <- system("git config --global user.name", intern = TRUE)
     user <- str_trim(user)
   }), silent = TRUE)
-  if (ok(user)){
+  if (ok(user)) {
     return(user)
-  } else{
+  } else {
     user <- try(suppressWarnings({
-      user <- system(paste0("git config --file ",
-                            file.path(Sys.getenv("USERPROFILE"),
-                                      ".gitconfig"),
-                            " user.name"), intern = TRUE)
+      user <- system(paste0(
+        "git config --file ",
+        file.path(
+          Sys.getenv("USERPROFILE"),
+          ".gitconfig"
+        ),
+        " user.name"
+      ), intern = TRUE)
       user <- str_trim(user)
     }), silent = TRUE)
-    if(ok(user)){
+    if (ok(user)) {
       return(user)
     }
   }
@@ -202,26 +241,31 @@ fullname <- function(fallback = NULL) {
 #' \dontrun{
 #' email_address()
 #' }
-
+#'
 email_address <- function(fallback = NULL) {
-
-  if ((x <- Sys.getenv("EMAIL", "")) != "") return(x)
+  if ((x <- Sys.getenv("EMAIL", "")) != "") {
+    return(x)
+  }
 
   email <- try(suppressWarnings({
     email <- system("git config --global user.email", intern = TRUE)
     email <- str_trim(email)
   }), silent = TRUE)
-  if (ok(email)){
+  if (ok(email)) {
     return(email)
-  } else{
+  } else {
     user <- try(suppressWarnings({
-      email <- system(paste0("git config --file ",
-                            file.path(Sys.getenv("USERPROFILE"),
-                                      ".gitconfig"),
-                            " user.email"), intern = TRUE)
+      email <- system(paste0(
+        "git config --file ",
+        file.path(
+          Sys.getenv("USERPROFILE"),
+          ".gitconfig"
+        ),
+        " user.email"
+      ), intern = TRUE)
       email <- str_trim(email)
     }), silent = TRUE)
-    if(ok(email)){
+    if (ok(email)) {
       return(email)
     }
   }
@@ -257,33 +301,36 @@ email_address <- function(fallback = NULL) {
 #' \dontrun{
 #' gh_username()
 #' }
-
+#'
 gh_username <- function(token = NULL,
                         fallback = NULL) {
   # try reading username from global variable
   env_gh_username <- Sys.getenv("GITHUB_USERNAME")
-  if (nzchar(env_gh_username)) return(env_gh_username)
+  if (nzchar(env_gh_username)) {
+    return(env_gh_username)
+  }
 
   email <- try(email_address(), silent = TRUE)
   if (ok(email)) {
-    if (! grepl('@', email)) {
+    if (!grepl("@", email)) {
       return(fallback_or_stop(
         fallback,
         "This does not seem to be an email address"
       ))
     }
     lookup_gh_username(email, token, fallback)
-
   } else {
     fallback_or_stop(fallback, "Cannot get GitHub username")
   }
 }
 
 lookup_gh_username <- function(email, token, fallback) {
-  url <- URLencode(paste0(gh_url, "/search/users?q=", email,
-                          " in:email"))
+  url <- URLencode(paste0(
+    gh_url, "/search/users?q=", email,
+    " in:email"
+  ))
 
-  if(is.null(token)){
+  if (is.null(token)) {
     token <- Sys.getenv("GITHUB_TOKEN", Sys.getenv("GITHUB_PAT"))
   }
 
@@ -292,9 +339,11 @@ lookup_gh_username <- function(email, token, fallback) {
 
   resp <- GET(
     url,
-    add_headers("user-agent" = "https://github.com/r-lib/whoami",
-                'accept' = 'application/vnd.github.v3+json',
-                .headers = auth)
+    add_headers(
+      "user-agent" = "https://github.com/r-lib/whoami",
+      "accept" = "application/vnd.github.v3+json",
+      .headers = auth
+    )
   )
   if (status_code(resp) >= 300) {
     return(fallback_or_stop(fallback, "Cannot find GitHub username"))
@@ -345,9 +394,10 @@ lookup_gh_username <- function(email, token, fallback) {
 #' for the user's email address.
 
 whoami <- function() {
-  c("username" = username(),
+  c(
+    "username" = username(),
     "fullname" = fullname(),
     "email_address" = email_address(),
     "gh_username" = gh_username()
-    )
+  )
 }
