@@ -3,8 +3,8 @@
 
 # whoami
 
-[![](http://www.r-pkg.org/badges/version/whoami)](http://www.r-pkg.org/pkg/whoami)
-[![CRAN RStudio mirror downloads](http://cranlogs.r-pkg.org/badges/whoami)](http://www.r-pkg.org/pkg/whoami)
+[![](https://www.r-pkg.org/badges/version/whoami)](https://www.r-pkg.org/pkg/whoami)
+[![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/whoami)](https://www.r-pkg.org/pkg/whoami)
 [![Coverage Status](https://img.shields.io/codecov/c/github/r-lib/whoami/master.svg)](https://codecov.io/github/r-lib/whoami?branch=master)
 
 > Username, full name, email address, GitHub username of the current user
@@ -90,4 +90,4 @@ whoami()
 
 ## License
 
-MIT © [Gábor Csárdi](http://gaborcsardi.org)
+MIT © [Gábor Csárdi](https://github.com/gaborcsardi)
