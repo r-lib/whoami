@@ -26,3 +26,4 @@ Suggests:
 Encoding: UTF-8
 RoxygenNote: 6.1.1
 Roxygen: list(markdown = TRUE)
+Config/Needs/website: tidyverse/tidytemplate
