@@ -3,9 +3,12 @@
 
 # whoami
 
+<!-- badges: start -->
 [![](https://www.r-pkg.org/badges/version/whoami)](https://www.r-pkg.org/pkg/whoami)
 [![CRAN RStudio mirror downloads](https://cranlogs.r-pkg.org/badges/whoami)](https://www.r-pkg.org/pkg/whoami)
-[![Coverage Status](https://img.shields.io/codecov/c/github/r-lib/whoami/master.svg)](https://codecov.io/github/r-lib/whoami?branch=master)
+[![R-CMD-check](https://github.com/r-lib/whoami/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/r-lib/whoami/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/r-lib/whoami/branch/main/graph/badge.svg)](https://app.codecov.io/gh/r-lib/whoami?branch=main)
+<!-- badges: end -->
 
 > Username, full name, email address, GitHub username of the current user
 
