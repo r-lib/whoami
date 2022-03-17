@@ -18,8 +18,8 @@ test_that("email_address() falls back", {
 })
 
 test_that("gh_username() falls back", {
-  mockery::stub(gh_username, "me@example.com", "example e-mail")
-  expect_equal(gh_username(fallback = "example"), "example")
+  mockery::stub(gh_username, "email_address", "me@example.com")
+  expect_equal(gh_username(fallback = "fallback"), "fallback")
 
   mockery::stub(gh_username, "email_address", "not an email")
   expect_equal(gh_username(fallback = "foobar"), "foobar")
