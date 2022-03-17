@@ -1,6 +1,4 @@
 
-context("Fallbacks")
-
 test_that("username() falls back", {
   mockery::stub(username, "Sys.getenv", NULL)
   mockery::stub(username, "system", function(...) stop())

@@ -1,6 +1,4 @@
 
-context("GitHub username")
-
 test_that("Github username works", {
   skip_on_cran()
 
@@ -21,14 +19,12 @@ test_that("Github username works", {
   expect_equal(gh_username(), "gaborcsardi")
 
   # when there's an environment variable
-  with_mock(
-    Sys.getenv = function(x) {
-      if (x == "GITHUB_USERNAME") {
-        "anuser"
-      } else {
-        Sys.getenv(x)
-      }
-    },
-    expect_equal(gh_username(), "anuser")
-  )
+  mockery::stub(gh_username, "Sys.getenv", function(x) {
+    if (x == "GITHUB_USERNAME") {
+      "anuser"
+    } else {
+      Sys.getenv(x)
+    }
+  })
+  expect_equal(gh_username(), "anuser")
 })

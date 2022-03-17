@@ -1,6 +1,4 @@
 
-context("Full name")
-
 test_that("fullname fallback", {
   mockery::stub(fullname, "system", function(cmd, ...) {
     if (grepl("^git config", cmd)) {

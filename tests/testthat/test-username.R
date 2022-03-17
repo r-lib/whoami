@@ -1,6 +1,4 @@
 
-context("Username")
-
 test_that("username works", {
   user <- Sys.getenv("LOGNAME")
   on.exit(Sys.setenv(LOGNAME = user), add = TRUE)
