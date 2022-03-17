@@ -1,9 +1,7 @@
 
-context("memoize")
-
 test_that("can memoize", {
   called <- 0L
-  f <- function(x)  called <<- called + 1L
+  f <- function(x) called <<- called + 1L
   f <- memoize_first(f)
   f("a")
   f("a")
@@ -18,7 +16,7 @@ test_that("can memoize", {
 
 test_that("non-string argument", {
   called <- 0L
-  f <- function(x)  called <<- called + 1L
+  f <- function(x) called <<- called + 1L
   f <- memoize_first(f)
   f(NULL)
   f(123)

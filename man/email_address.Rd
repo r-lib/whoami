@@ -21,10 +21,13 @@ Otherwise it tries to find it in the user's global git configuration.
 \dontrun{
 email_address()
 }
+
 }
 \seealso{
-Other user names: \code{\link{fullname}},
-  \code{\link{gh_username}}, \code{\link{username}},
-  \code{\link{whoami}}
+Other user names: 
+\code{\link{fullname}()},
+\code{\link{gh_username}()},
+\code{\link{username}()},
+\code{\link{whoami}()}
 }
 \concept{user names}

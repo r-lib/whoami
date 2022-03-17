@@ -22,10 +22,13 @@ Otherwise tries system full names and the git configuration as well.
 \dontrun{
 fullname()
 }
+
 }
 \seealso{
-Other user names: \code{\link{email_address}},
-  \code{\link{gh_username}}, \code{\link{username}},
-  \code{\link{whoami}}
+Other user names: 
+\code{\link{email_address}()},
+\code{\link{gh_username}()},
+\code{\link{username}()},
+\code{\link{whoami}()}
 }
 \concept{user names}
