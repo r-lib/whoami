@@ -33,10 +33,13 @@ GitHub query.
 \dontrun{
 gh_username()
 }
+
 }
 \seealso{
-Other user names: \code{\link{email_address}},
-  \code{\link{fullname}}, \code{\link{username}},
-  \code{\link{whoami}}
+Other user names: 
+\code{\link{email_address}()},
+\code{\link{fullname}()},
+\code{\link{username}()},
+\code{\link{whoami}()}
 }
 \concept{user names}
