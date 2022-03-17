@@ -93,4 +93,4 @@ whoami()
 
 ## License
 
-MIT © [Gábor Csárdi](https://github.com/gaborcsardi)
+MIT © [Gábor Csárdi](https://github.com/gaborcsardi), [RStudio](https://github.com/rstudio)
