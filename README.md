@@ -91,6 +91,12 @@ whoami()
 #>            "gaborcsardi"
 ```
 
+## Code of Conduct
+
+Please note that the whoami project is released with a
+[Contributor Code of Conduct](http://r-lib.github.io/whoami/CODE_OF_CONDUCT.html).
+By contributing to this project, you agree to abide by its terms.
+
 ## License
 
 MIT © [Gábor Csárdi](https://github.com/gaborcsardi), [RStudio](https://github.com/rstudio)
