@@ -7,3 +7,7 @@
 ^tags$
 ^.travis.yml$
 ^appveyor.yml$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^\.github$
