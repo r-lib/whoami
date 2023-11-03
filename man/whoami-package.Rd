@@ -23,6 +23,7 @@ Useful links:
 Other contributors:
 \itemize{
   \item Maëlle Salmon [contributor]
+  \item Posit Software, PBC [copyright holder, funder]
 }
 
 }
