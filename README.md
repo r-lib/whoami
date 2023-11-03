@@ -44,6 +44,14 @@ Install the package from CRAN as usual:
 install.packages("whoami")
 ```
 
+If you need the development version of this package, install it
+from GitHub:
+
+
+```r
+pak::pak("r-lib/whoami")
+```
+
 ## Usage
 
 
