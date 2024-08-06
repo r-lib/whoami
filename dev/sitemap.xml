@@ -1,42 +1,16 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url>
-    <loc>http://r-lib.github.io/whoami/dev/CODE_OF_CONDUCT.html</loc>
-  </url>
-  <url>
-    <loc>http://r-lib.github.io/whoami/dev/LICENSE-text.html</loc>
-  </url>
-  <url>
-    <loc>http://r-lib.github.io/whoami/dev/LICENSE.html</loc>
-  </url>
-  <url>
-    <loc>http://r-lib.github.io/whoami/dev/authors.html</loc>
-  </url>
-  <url>
-    <loc>http://r-lib.github.io/whoami/dev/index.html</loc>
-  </url>
-  <url>
-    <loc>http://r-lib.github.io/whoami/dev/news/index.html</loc>
-  </url>
-  <url>
-    <loc>http://r-lib.github.io/whoami/dev/reference/email_address.html</loc>
-  </url>
-  <url>
-    <loc>http://r-lib.github.io/whoami/dev/reference/fullname.html</loc>
-  </url>
-  <url>
-    <loc>http://r-lib.github.io/whoami/dev/reference/gh_username.html</loc>
-  </url>
-  <url>
-    <loc>http://r-lib.github.io/whoami/dev/reference/index.html</loc>
-  </url>
-  <url>
-    <loc>http://r-lib.github.io/whoami/dev/reference/username.html</loc>
-  </url>
-  <url>
-    <loc>http://r-lib.github.io/whoami/dev/reference/whoami-package.html</loc>
-  </url>
-  <url>
-    <loc>http://r-lib.github.io/whoami/dev/reference/whoami.html</loc>
-  </url>
+<urlset xmlns = 'http://www.sitemaps.org/schemas/sitemap/0.9'>
+<url><loc>http://r-lib.github.io/whoami/dev/CODE_OF_CONDUCT.html</loc></url>
+<url><loc>http://r-lib.github.io/whoami/dev/LICENSE-text.html</loc></url>
+<url><loc>http://r-lib.github.io/whoami/dev/LICENSE.html</loc></url>
+<url><loc>http://r-lib.github.io/whoami/dev/authors.html</loc></url>
+<url><loc>http://r-lib.github.io/whoami/dev/index.html</loc></url>
+<url><loc>http://r-lib.github.io/whoami/dev/news/index.html</loc></url>
+<url><loc>http://r-lib.github.io/whoami/dev/reference/email_address.html</loc></url>
+<url><loc>http://r-lib.github.io/whoami/dev/reference/fullname.html</loc></url>
+<url><loc>http://r-lib.github.io/whoami/dev/reference/gh_username.html</loc></url>
+<url><loc>http://r-lib.github.io/whoami/dev/reference/index.html</loc></url>
+<url><loc>http://r-lib.github.io/whoami/dev/reference/username.html</loc></url>
+<url><loc>http://r-lib.github.io/whoami/dev/reference/whoami-package.html</loc></url>
+<url><loc>http://r-lib.github.io/whoami/dev/reference/whoami.html</loc></url>
 </urlset>
+
