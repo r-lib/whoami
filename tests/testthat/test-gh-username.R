@@ -15,12 +15,12 @@ test_that("Github username works", {
     skip("No internet, skipping")
   }
 
-  mockery::stub(gh_username, "email_address", "csardi.gabor@gmail.com")
-  mockery::stub(gh_username, "lookup_gh_username", "gaborcsardi")
+  local_mocked_bindings(email_address = function() "csardi.gabor@gmail.com")
+  local_mocked_bindings(lookup_gh_username = function(...) "gaborcsardi")
   expect_equal(gh_username(), "gaborcsardi")
 
   # when there's an environment variable
-  mockery::stub(gh_username, "Sys.getenv", function(x) {
+  local_mocked_bindings(Sys.getenv = function(x) {
     if (x == "GITHUB_USERNAME") {
       "anuser"
     } else {

@@ -1,6 +1,6 @@
 
 test_that("fullname fallback", {
-  mockery::stub(fullname, "system", function(cmd, ...) {
+  local_mocked_bindings(system = function(cmd, ...) {
     if (grepl("^git config", cmd)) {
       "Joe Jamba"
     } else {
