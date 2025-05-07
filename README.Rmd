@@ -1,5 +1,8 @@
 
-```{r, setup, echo = FALSE, message = FALSE}
+```{r}
+#| label: setup
+#| echo: false
+#| message: false
 knitr::opts_chunk$set(
   comment = "#>",
   tidy = FALSE,
@@ -44,14 +47,16 @@ Related JavaScript packages:
 
 Install the package from CRAN as usual:
 
-```{r, eval = FALSE}
+```{r}
+#| eval: false
 install.packages("whoami")
 ```
 
 If you need the development version of this package, install it
 from GitHub:
 
-```{r eval = FALSE}
+```{r}
+#| eval: false
 pak::pak("r-lib/whoami")
 ```
 
