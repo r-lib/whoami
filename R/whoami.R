@@ -1,4 +1,3 @@
-
 .onLoad <- function(libname, pkgname) {
   lookup_gh_username <<- memoize_first(lookup_gh_username)
 }
@@ -132,7 +131,8 @@ fullname <- function(fallback = NULL) {
 
     user <- try(
       {
-        user <- system("osascript -e \"long user name of (system info)\"",
+        user <- system(
+          "osascript -e \"long user name of (system info)\"",
           intern = TRUE
         )
         user <- str_trim(user)
@@ -143,24 +143,33 @@ fullname <- function(fallback = NULL) {
       return(user)
     }
   } else if (.Platform$OS.type == "windows") {
-    user <- try(suppressWarnings({
-      user <- system("git config --global user.name", intern = TRUE)
-      user <- str_trim(user)
-    }), silent = TRUE)
+    user <- try(
+      suppressWarnings({
+        user <- system("git config --global user.name", intern = TRUE)
+        user <- str_trim(user)
+      }),
+      silent = TRUE
+    )
     if (ok(user)) {
       return(user)
     } else {
-      user <- try(suppressWarnings({
-        user <- system(paste0(
-          "git config --file ",
-          file.path(
-            Sys.getenv("USERPROFILE"),
-            ".gitconfig"
-          ),
-          " user.name"
-        ), intern = TRUE)
-        user <- str_trim(user)
-      }), silent = TRUE)
+      user <- try(
+        suppressWarnings({
+          user <- system(
+            paste0(
+              "git config --file ",
+              file.path(
+                Sys.getenv("USERPROFILE"),
+                ".gitconfig"
+              ),
+              " user.name"
+            ),
+            intern = TRUE
+          )
+          user <- str_trim(user)
+        }),
+        silent = TRUE
+      )
       if (ok(user)) {
         return(user)
       }
@@ -171,7 +180,8 @@ fullname <- function(fallback = NULL) {
         username <- username()
         user <- system(
           paste0(
-            "wmic useraccount where name=\"", username,
+            "wmic useraccount where name=\"",
+            username,
             "\" get fullname"
           ),
           intern = TRUE
@@ -200,24 +210,33 @@ fullname <- function(fallback = NULL) {
     }
   }
 
-  user <- try(suppressWarnings({
-    user <- system("git config --global user.name", intern = TRUE)
-    user <- str_trim(user)
-  }), silent = TRUE)
+  user <- try(
+    suppressWarnings({
+      user <- system("git config --global user.name", intern = TRUE)
+      user <- str_trim(user)
+    }),
+    silent = TRUE
+  )
   if (ok(user)) {
     return(user)
   } else {
-    user <- try(suppressWarnings({
-      user <- system(paste0(
-        "git config --file ",
-        file.path(
-          Sys.getenv("USERPROFILE"),
-          ".gitconfig"
-        ),
-        " user.name"
-      ), intern = TRUE)
-      user <- str_trim(user)
-    }), silent = TRUE)
+    user <- try(
+      suppressWarnings({
+        user <- system(
+          paste0(
+            "git config --file ",
+            file.path(
+              Sys.getenv("USERPROFILE"),
+              ".gitconfig"
+            ),
+            " user.name"
+          ),
+          intern = TRUE
+        )
+        user <- str_trim(user)
+      }),
+      silent = TRUE
+    )
     if (ok(user)) {
       return(user)
     }
@@ -247,24 +266,33 @@ email_address <- function(fallback = NULL) {
     return(x)
   }
 
-  email <- try(suppressWarnings({
-    email <- system("git config --global user.email", intern = TRUE)
-    email <- str_trim(email)
-  }), silent = TRUE)
+  email <- try(
+    suppressWarnings({
+      email <- system("git config --global user.email", intern = TRUE)
+      email <- str_trim(email)
+    }),
+    silent = TRUE
+  )
   if (ok(email)) {
     return(email)
   } else {
-    user <- try(suppressWarnings({
-      email <- system(paste0(
-        "git config --file ",
-        file.path(
-          Sys.getenv("USERPROFILE"),
-          ".gitconfig"
-        ),
-        " user.email"
-      ), intern = TRUE)
-      email <- str_trim(email)
-    }), silent = TRUE)
+    user <- try(
+      suppressWarnings({
+        email <- system(
+          paste0(
+            "git config --file ",
+            file.path(
+              Sys.getenv("USERPROFILE"),
+              ".gitconfig"
+            ),
+            " user.email"
+          ),
+          intern = TRUE
+        )
+        email <- str_trim(email)
+      }),
+      silent = TRUE
+    )
     if (ok(email)) {
       return(email)
     }
@@ -302,8 +330,7 @@ email_address <- function(fallback = NULL) {
 #' gh_username()
 #' }
 #'
-gh_username <- function(token = NULL,
-                        fallback = NULL) {
+gh_username <- function(token = NULL, fallback = NULL) {
   # try reading username from global variable
   env_gh_username <- Sys.getenv("GITHUB_USERNAME")
   if (nzchar(env_gh_username)) {
@@ -326,7 +353,9 @@ gh_username <- function(token = NULL,
 
 lookup_gh_username <- function(email, token, fallback) {
   url <- URLencode(paste0(
-    gh_url, "/search/users?q=", email,
+    gh_url,
+    "/search/users?q=",
+    email,
     " in:email"
   ))
 

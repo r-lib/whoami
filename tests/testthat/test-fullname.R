@@ -1,4 +1,3 @@
-
 test_that("fullname fallback", {
   local_mocked_bindings(system = function(cmd, ...) {
     if (grepl("^git config", cmd)) {

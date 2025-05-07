@@ -1,4 +1,3 @@
-
 test_that("username() falls back", {
   local_mocked_bindings(Sys.getenv = function() NULL)
   local_mocked_bindings(system = function(...) stop())

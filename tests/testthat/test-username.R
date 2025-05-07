@@ -1,4 +1,3 @@
-
 test_that("username works", {
   user <- Sys.getenv("LOGNAME")
   on.exit(Sys.setenv(LOGNAME = user), add = TRUE)
@@ -12,10 +11,15 @@ test_that("username fallback works", {
   USER <- Sys.getenv("USER")
   LNAME <- Sys.getenv("LNAME")
   USERNAME <- Sys.getenv("USERNAME")
-  on.exit(Sys.setenv(
-    LOGNAME = LOGNAME, USER = USER,
-    LNAME = LNAME, USERNAME = USERNAME
-  ), add = TRUE)
+  on.exit(
+    Sys.setenv(
+      LOGNAME = LOGNAME,
+      USER = USER,
+      LNAME = LNAME,
+      USERNAME = USERNAME
+    ),
+    add = TRUE
+  )
 
   expect_match(username(), ".*")
 })
