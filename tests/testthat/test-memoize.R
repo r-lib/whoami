@@ -1,4 +1,3 @@
-
 test_that("can memoize", {
   called <- 0L
   f <- function(x) called <<- called + 1L

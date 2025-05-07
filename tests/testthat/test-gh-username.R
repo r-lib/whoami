@@ -1,4 +1,3 @@
-
 test_that("Github username works", {
   skip_on_cran()
 

@@ -1,4 +1,3 @@
-
 test_that("Email address works", {
   local_mocked_bindings(system = function(...) "jambajoe@joe.joe")
   expect_equal(email_address(), "jambajoe@joe.joe")
